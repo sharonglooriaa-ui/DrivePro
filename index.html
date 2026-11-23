@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DrivePro — Car Service & Workshop Management System</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0b2c6b 0%, #1852b8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            color: #0f172a;
+        }
+        .portal-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 540px;
+            border-radius: 20px;
+            padding: 36px 32px;
+            box-shadow: 0 20px 50px rgba(7, 25, 62, 0.35);
+            text-align: center;
+        }
+        .badge {
+            display: inline-block;
+            background: #eff6ff;
+            color: #1852b8;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 99px;
+            margin-bottom: 14px;
+        }
+        h1 { font-size: 26px; color: #0b2c6b; margin-bottom: 8px; }
+        p { font-size: 14px; color: #64748b; line-height: 1.5; margin-bottom: 26px; }
+        .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .role-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 20px 14px;
+            border-radius: 14px;
+            border: 1.5px solid #e2e8f0;
+            background: #f8fafd;
+            text-decoration: none;
+            color: #0b2c6b;
+            transition: all 0.2s ease;
+        }
+        .role-btn:hover {
+            border-color: #1852b8;
+            background: #eff6ff;
+            transform: translateY(-2px);
+        }
+        .role-btn strong { font-size: 15px; }
+        .role-btn span { font-size: 12px; color: #64748b; }
+        @media (max-width: 480px) { .role-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="portal-card">
+        <span class="badge">DrivePro Web System</span>
+        <h1>Pilih Portal Akses</h1>
+        <p>Silakan pilih tampilan aplikasi yang ingin Anda buka untuk mencoba fitur reservasi servis maupun manajemen operasional bengkel.</p>
+        <div class="role-grid">
+            <a href="./customer/index.html" class="role-btn">
+                <div style="font-size: 28px;">🚗</div>
+                <strong>Customer Portal</strong>
+                <span>Booking Servis, Cek Antrean &amp; Member</span>
+            </a>
+            <a href="./staff/login.html" class="role-btn">
+                <div style="font-size: 28px;">🔧</div>
+                <strong>Staff Bengkel</strong>
+                <span>Dashboard Operasional &amp; Antrean Bay</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
