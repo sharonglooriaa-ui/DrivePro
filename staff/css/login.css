@@ -1,0 +1,101 @@
+.login-body {
+    background: linear-gradient(135deg, #061536 0%, #103c8c 60%, #1d63dc 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.login-card {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 40px;
+    max-width: 460px;
+    width: 100%;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+}
+
+.brand-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.brand-row img {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+}
+
+.brand-row strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 800;
+    color: #103c8c;
+    line-height: 1.1;
+}
+
+.brand-row small {
+    font-size: 10px;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.8px;
+}
+
+.login-card h1 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #07193d;
+    margin-bottom: 8px;
+}
+
+.login-card > p {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 20px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.login-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.login-form label {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.login-form input {
+    padding: 11px 14px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.demo-box {
+    margin-top: 20px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.65;
+}
+
+.demo-box code {
+    background: #eef4ff;
+    color: #103c8c;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+}

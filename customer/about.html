@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - DrivePro AutoCare</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/about.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="top-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <img src="assets/logo.jpg" alt="Logo DrivePro" class="logo-img">
+                <div class="logo-text">
+                    <strong>DrivePro</strong>
+                    <small>YOUR CAR, OUR PRIORITY.</small>
+                </div>
+            </a>
+
+            <nav class="main-nav">
+                <a href="service.html">SERVICE</a>
+                <a href="member.html">MEMBER</a>
+                <a href="antrean.html">CEK ANTREAN</a>
+                <a href="about.html" class="active">ABOUT US</a>
+            </nav>
+        </div>
+    </header>
+    </header>
+
+    <main class="about-page">
+        <!-- =========================================================
+             1. HERO SECTION: DRIVEN BY CARE + 3D PODIUM CAROUSEL
+             ========================================================= -->
+        <section class="about-hero-section">
+            <div class="container about-hero-grid">
+                <!-- Kiri: Teks Utama -->
+                <div class="about-hero-text">
+                    <!-- <span class="pill-badge-outline">About Us</span> -->
+                    <h1>
+                        Driven by Care,<br>
+                        <span class="highlight-italic">Built for You</span>
+                    </h1>
+                    <p>
+                        Established in 2018, we have been proudly serving our community with reliable automotive care. Our goal is simple: to provide honest, high-quality repair services at fair prices, so you can drive with peace of mind. With experienced mechanics and genuine parts, we treat every vehicle like it’s our own — because your safety and satisfaction always come first.
+                    </p>
+                    <!-- <a href="#branchesSection" class="btn-hero-pill">
+                        <span>Learn More</span>
+                        <span class="btn-circle-arrow">&rarr;</span>
+                    </a> -->
+                </div>
+
+                <!-- Kanan: 3D Carousel + Podium Cincin -->
+                <div class="about-carousel-stage">
+                    <button type="button" class="carousel-nav-btn prev" onclick="moveAboutSlide(-1)" aria-label="Previous">&#8249;</button>
+
+                    <div class="carousel-track-3d" id="aboutCarouselTrack">
+                        <!-- Slide 0 -->
+                        <div class="c3d-card" data-index="0">
+                            <img src="assets/mas.jpg" alt="DrivePro Auto Service Center" onerror="this.src='assets/car1.png'">
+                        </div>
+                        <!-- Slide 1 -->
+                        <div class="c3d-card" data-index="1">
+                            <img src="assets/staff.jpg" alt="DrivePro Certified Technician" onerror="this.src='assets/avanza.png'">
+                        </div>
+                        <!-- Slide 2 -->
+                        <div class="c3d-card" data-index="2">
+                            <img src="assets/sertifikat.jpg" alt="DrivePro Modern Service Bay" onerror="this.src='assets/ioniq.png'">
+                        </div>
+                        <!-- Slide 3 -->
+                        <div class="c3d-card" data-index="3">
+                            <img src="assets/staff2.jpg" alt="DrivePro Modern Service Bay" onerror="this.src='assets/ioniq.png'">
+                        </div>
+                        <!-- Slide 4 -->
+                        <div class="c3d-card" data-index="4">   
+                            <img src="assets/sertif2.jpg" alt="DrivePro Modern Service Bay" onerror="this.src='assets/ioniq.png'">  
+                        </div>
+                        
+                    </div>
+
+                    <button type="button" class="carousel-nav-btn next" onclick="moveAboutSlide(1)" aria-label="Next">&#8250;</button>
+
+                    <!-- Podium Cincin 3D di Bawah Kartu -->
+                    <div class="carousel-podium-ring"></div>
+
+                    <!-- Indikator Dots -->
+                    <div class="carousel-dots" id="aboutCarouselDots">
+                        <button type="button" class="cdot active" onclick="goToAboutSlide(0)"></button>
+                        <button type="button" class="cdot" onclick="goToAboutSlide(1)"></button>
+                        <button type="button" class="cdot" onclick="goToAboutSlide(2)"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             2. CORE VALUES STRIP (3 KOLOM)
+             ========================================================= -->
+        <section class="container values-strip-wrapper">
+            <div class="values-glass-bar">
+                <!-- Item 1 -->
+                <div class="val-item">
+                    <div class="val-icon-box">
+                        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#1852b8" stroke-width="2.2">
+                            <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"/>
+                            <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>Trust &amp; Quality</h4>
+                        <p>Reliable service you can count on.</p>
+                    </div>
+                </div>
+
+                <div class="val-divider"></div>
+
+                <!-- Item 2 -->
+                <div class="val-item">
+                    <div class="val-icon-box">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="#1852b8">
+                            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>Customer First</h4>
+                        <p>Your satisfaction is our priority.</p>
+                    </div>
+                </div>
+
+                <div class="val-divider"></div>
+
+                <!-- Item 3 -->
+                <div class="val-item">
+                    <div class="val-icon-box">
+                        <svg width="34" height="34" viewBox="0 0 24 24" fill="#1852b8">
+                            <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>Innovation</h4>
+                        <p>Always evolving for better service.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <!-- =========================================================
+             3. OUR BRANCHES SECTION
+             ========================================================= -->
+        <section id="branchesSection" class="container branches-section">
+            <div class="branches-layout">
+                <!-- Kiri: Header Cabang -->
+                <div class="branches-intro">
+                    <div class="eyebrow-line-group">
+                        <span class="pill-badge-outline">Our Branches</span>
+                        <span class="short-blue-line"></span>
+                    </div>
+                    <h2>Visit Our<br>Nearest Branch</h2>
+                    <p>
+                        Get premium car care services<br>
+                        at our conveniently located branches.
+                    </p>
+                    <!-- <a href="https://wa.me/6281234567890" target="_blank" class="btn-hero-pill">
+                        <span>Contact Us</span>
+                        <span class="btn-circle-arrow">&rarr;</span>
+                    </a> -->
+                </div>
+
+                <!-- Kanan: 3 Kartu Cabang -->
+                <div class="branches-cards-grid" id="branchesGrid">
+                    <!-- Dirender otomatis oleh about.js -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL DETAIL CABANG -->
+    <!-- <div id="branchDetailModal" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3 id="modalBranchName">Branch Name</h3>
+                <button type="button" class="modal-close-x" onclick="closeBranchModal()">&times;</button>
+            </div>
+            <img id="modalBranchImg" src="" alt="Branch" class="modal-branch-banner">
+            <div class="modal-branch-body">
+                <p><strong>Alamat:</strong> <span id="modalBranchAddress"></span></p>
+                <p><strong>Telepon:</strong> <span id="modalBranchPhone"></span></p>
+                <p><strong>Jam Operasional:</strong> <span id="modalBranchHours"></span></p>
+                <p><strong>Fasilitas Layanan:</strong> <span id="modalBranchFacilities"></span></p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-outline-pill" onclick="closeBranchModal()">Tutup</button>
+                <a href="service.html" class="btn-hero-pill" style="padding: 10px 22px;">Booking di Cabang Ini &rarr;</a>
+            </div>
+        </div>
+    </div> -->
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <p>&copy; 2026 DrivePro Car Service &amp; Maintenance. All rights reserved.</p>
+            <p>Buka Setiap Hari: 08.00 – 20.00 WIB</p>
+        </div>
+    </footer>
+
+    <script src="js/about.js"></script>
+    <script src="js/data.js"></script>
+</body>
+</html>

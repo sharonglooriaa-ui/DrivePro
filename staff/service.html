@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Service Walk-In - DrivePro Staff</title>
+    <link rel="stylesheet" href="css/staff-global.css">
+    <link rel="stylesheet" href="css/service.css">
+</head>
+<body>
+
+    <header class="top-navbar">
+        <div class="nav-container">
+            <a href="antrean.html" class="brand-logo">
+                <img src="assets/logo.jpg" alt="Logo DrivePro" class="logo-img">
+                <div class="logo-text">
+                    <strong>DrivePro</strong>
+                    <small>YOUR CAR, OUR PRIORITY.</small>
+                </div>
+            </a>
+
+            <nav class="main-nav">
+                <a href="service.html" class="active">SERVICE</a>
+                <a href="antrean.html">ANTREAN</a>
+                <a href="riwayat.html">RIWAYAT TRANSAKSI</a>
+                <a href="profil.html">PROFIL STAFF</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="panel-card">
+            <span class="eyebrow-pill">WALK-IN SERVICE</span>
+            <h2>Form Booking Antrean Customer (Tanpa HP)</h2>
+            <p class="subtitle">Isikan data kendaraan dan keluhan awal customer. Nomor antrean otomatis terhubung ke daftar antrean customer.</p>
+
+            <form id="walkInBookingForm" class="walkin-grid">
+                <div class="form-group">
+                    <label>Cabang Bengkel *</label>
+                    <select id="wiBranch" required>
+                        <option value="DrivePro Bandung - Soekarno Hatta">DrivePro Bandung - Soekarno Hatta</option>
+                        <option value="DrivePro Jakarta - TB Simatupang">DrivePro Jakarta - TB Simatupang</option>
+                        <option value="DrivePro Surabaya - Ahmad Yani">DrivePro Surabaya - Ahmad Yani</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Jenis Mesin Mobil *</label>
+                    <select id="wiEngineType" onchange="renderWalkInChecklist()" required>
+                        <option value="Bensin">Bensin (ICE)</option>
+                        <option value="Hybrid">Hybrid (HEV/PHEV)</option>
+                        <option value="Listrik">Listrik (EV)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Nama Lengkap Customer *</label>
+                    <input type="text" id="wiCustomerName" placeholder="Nama customer" required>
+                </div>
+
+                <div class="form-group">
+                    <label>No. WhatsApp / HP (Opsional jika tidak bawa HP)</label>
+                    <input type="text" id="wiPhone" placeholder="Contoh: 081234567890 atau -">
+                </div>
+
+                <div class="form-group">
+                    <label>Merk & Tipe Mobil *</label>
+                    <input type="text" id="wiCarModel" placeholder="Contoh: Toyota Avanza / Hyundai Ioniq 5" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Nomor Polisi (Plat) *</label>
+                    <input type="text" id="wiPlate" placeholder="Contoh: D 1234 ABC" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Servis *</label>
+                    <input type="date" id="wiDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Jam Mulai Antrean *</label>
+                    <input type="time" id="wiTime" value="09:00" required>
+                </div>
+
+                <div class="form-group full-col">
+                    <label>Pilih Keluhan / Tindakan Servis Awal *</label>
+                    <div id="wiChecklistContainer" class="check-grid"></div>
+                </div>
+
+                <div class="full-col" style="text-align: right; margin-top: 8px;">
+                    <button type="submit" class="btn-primary">Simpan & Masukkan ke Daftar Antrean</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <p>&copy; 2026 DrivePro — Your Car, Our Priority.</p>
+            <p>Staff & Workshop Operations Portal</p>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/service.js"></script>
+</body>
+</html>

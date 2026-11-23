@@ -1,0 +1,286 @@
+/* css/about.css */
+body {
+    overflow-x: hidden;
+    background-color: #f5f8fd;
+    margin: 0;
+}
+
+.about-hero-banner {
+    background: linear-gradient(180deg, #07193d 0%, #103c8c 68%, #f5f8fd 68%);
+    padding: 48px 20px 16px;
+    text-align: center;
+}
+
+.hero-intro-text {
+    max-width: 680px;
+    margin: 0 auto 32px;
+    color: #ffffff;
+}
+
+.hero-pill {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    padding: 5px 16px;
+    border-radius: 99px;
+    margin-bottom: 12px;
+}
+
+.hero-intro-text h1 {
+    font-size: 36px;
+    font-weight: 800;
+    margin: 0 0 10px;
+    color: #ffffff;
+}
+
+.hero-intro-text p {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.88);
+    margin: 0;
+}
+
+/* Carousel Foto Ramping di Tengah & Utuh */
+.carousel-showcase {
+    position: relative;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px;
+    box-sizing: border-box;
+}
+
+.carousel-track-window {
+    width: 100%;
+    height: 360px;
+    background-color: #06132e;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 44px -10px rgba(7, 25, 61, 0.35);
+    border: 4px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.carousel-slide {
+    display: none;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-slide.active {
+    display: flex;
+}
+
+.carousel-slide img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.carousel-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #103c8c;
+    border: 1px solid rgba(16, 60, 140, 0.15);
+    box-shadow: 0 6px 18px rgba(7, 25, 61, 0.2);
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.carousel-nav-btn:hover {
+    background: #103c8c;
+    color: #ffffff;
+}
+
+.prev-btn { left: 4px; }
+.next-btn { right: 4px; }
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.ind-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 99px;
+    background: #cbd5e1;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.ind-dot.active {
+    width: 26px;
+    background: #103c8c;
+}
+
+/* Narasi Sejarah & Tujuan */
+.about-story-section {
+    padding: 36px 20px;
+}
+
+.centered-narrative-box {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid rgba(16, 60, 140, 0.08);
+    border-radius: 20px;
+    padding: 40px 44px;
+    text-align: center;
+    box-shadow: 0 10px 30px -5px rgba(7, 25, 61, 0.06);
+}
+
+.centered-narrative-box h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #07193d;
+    margin-bottom: 16px;
+}
+
+.text-blue { color: #1d63dc; }
+
+.story-lead {
+    font-size: 15px;
+    color: #0f172a;
+    line-height: 1.75;
+    margin-bottom: 12px;
+}
+
+.story-body {
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.8;
+}
+
+/* Lokasi Cabang & CS (3 Kolom Lurus) */
+.about-contact-section {
+    padding: 12px 20px 24px;
+}
+
+.contact-header-center {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.eyebrow-tag {
+    display: inline-block;
+    background: #eef4ff;
+    color: #103c8c;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    padding: 5px 14px;
+    border-radius: 99px;
+    margin-bottom: 8px;
+}
+
+.contact-header-center h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #07193d;
+    margin-bottom: 12px;
+}
+
+.official-email-pill {
+    display: inline-block;
+    background: #ffffff;
+    border: 1px solid rgba(16, 60, 140, 0.14);
+    color: #07193d;
+    font-size: 13px;
+    padding: 9px 20px;
+    border-radius: 99px;
+}
+
+.branch-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.branch-card {
+    background: #ffffff;
+    border: 1px solid rgba(16, 60, 140, 0.08);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 24px -6px rgba(7, 25, 61, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.branch-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px -8px rgba(16, 60, 140, 0.14);
+}
+
+.branch-tag {
+    display: inline-block;
+    background: #eef4ff;
+    color: #103c8c;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 99px;
+    margin-bottom: 10px;
+}
+
+.branch-card h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: #07193d;
+    margin: 0 0 6px;
+}
+
+.branch-addr {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.branch-wa-btn {
+    display: block;
+    background: #ecfdf5;
+    color: #047857;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 14px;
+    border-radius: 10px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.branch-wa-btn:hover {
+    background: #059669;
+    color: #ffffff;
+}
+
+@media (max-width: 820px) {
+    .carousel-track-window { height: 240px; }
+    .branch-grid { grid-template-columns: 1fr; }
+}

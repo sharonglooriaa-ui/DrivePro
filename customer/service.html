@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Service - DrivePro</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/service.css">
+</head>
+<body>
+
+    <header class="top-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <img src="assets/logo.jpg" alt="Logo DrivePro" class="logo-img">
+                <div class="logo-text">
+                    <strong>DrivePro</strong>
+                    <small>Your Car, Our Priority.</small>
+                </div>
+            </a>
+
+            <nav class="main-nav">
+                <a href="service.html" class="active">SERVICE</a>
+                <a href="member.html">MEMBER</a>
+                <a href="antrean.html">CEK ANTREAN</a>
+                <a href="about.html">ABOUT US</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container service-page">
+        <!-- Header dengan Foto Workshop Gallery -->
+        <div class="service-hero-card">
+            <img src="assets/workshop-gallery.jpg" alt="Suasana Workshop DrivePro" class="workshop-banner">
+            <div class="service-hero-overlay">
+                <h1>Booking Antrean Service Kendaraan</h1>
+                <p>Pilih layanan perawatan atau perbaikan mobil Anda dan dapatkan nomor antrean secara instan.</p>
+            </div>
+        </div>
+
+        <!-- Form Booking -->
+        <form id="serviceBookingForm" class="booking-card">
+            <!-- 1. Pilihan Status Pelanggan -->
+            <div class="form-section">
+                <h3>1. Status Pelanggan</h3>
+                <div class="radio-group-row">
+                    <label class="radio-card">
+                        <input type="radio" name="customerType" value="non-member" checked onchange="toggleCustomerType('non-member')">
+                        <span><strong>Non-Member</strong> (Pelanggan Umum)</span>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="customerType" value="member" onchange="toggleCustomerType('member')">
+                        <span><strong>Member</strong> (Gunakan Data & Kendaraan Tersimpan)</span>
+                    </label>
+                </div>
+
+                <!-- Jika Member Dipilih -->
+                <div id="memberLookupSection" class="sub-box" style="display: none;">
+                    <label for="memberIdentifier">Masukkan No. HP atau Email Member</label>
+                    <div class="inline-search">
+                        <input type="text" id="memberIdentifier" placeholder="Contoh: 081234567890 atau budi@email.com">
+                        <button type="button" class="btn-primary" onclick="lookupMember()">Cari Data Member</button>
+                    </div>
+                    <small class="hint-text">Demo akun tersedia: <strong>081234567890</strong> atau <strong>budi@email.com</strong></small>
+
+                    <div id="memberFoundBox" style="display: none; margin-top: 16px;">
+                        <div class="member-welcome-badge" id="memberWelcomeText"></div>
+                        <label style="margin-top: 12px; display: block;">Pilih Kendaraan Tersimpan atau Tambah Baru:</label>
+                        <div id="savedVehiclesList" class="saved-vehicle-grid"></div>
+                    </div>
+                </div>
+
+                <!-- Jika Non-Member Dipilih -->
+                <div id="guestIdentityFields" class="grid-2-col" style="margin-top: 16px;">
+                    <div class="form-group">
+                        <label for="guestName">Nama Lengkap *</label>
+                        <input type="text" id="guestName" placeholder="Masukkan nama lengkap">
+                    </div>
+                    <div class="form-group">
+                        <label for="guestPhone">Nomor HP (WhatsApp) *</label>
+                        <input type="tel" id="guestPhone" placeholder="Contoh: 0812xxxxxxxx">
+                    </div>
+                    <div class="form-group">
+                        <label for="guestEmail">Email *</label>
+                        <input type="email" id="guestEmail" placeholder="nama@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="guestCity">Kota Domisili *</label>
+                        <input type="text" id="guestCity" placeholder="Contoh: Bandung">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Informasi Kendaraan -->
+            <div class="form-section" id="vehicleInputSection">
+                <h3>2. Informasi Kendaraan</h3>
+                <div class="grid-2-col">
+                    <div class="form-group">
+                        <label for="engineType">Tipe Mesin / Penggerak *</label>
+                        <select id="engineType" onchange="handleEngineTypeChange(this.value)">
+                            <option value="Bensin">Bensin</option>
+                            <option value="Hybrid">Hybrid</option>
+                            <option value="Listrik">Listrik (EV)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="vehicleBrand">Merk Kendaraan *</label>
+                        <select id="vehicleBrand" onchange="handleBrandChange(this.value)" required>
+                            <option value="">-- Pilih Merk --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="vehicleModel">Nama / Model Kendaraan *</label>
+                        <select id="vehicleModel" required>
+                            <option value="">-- Pilih Model Kendaraan --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="plateNumber">Nomor Polisi *</label>
+                        <input type="text" id="plateNumber" placeholder="Contoh: D 1234 ABC" required style="text-transform: uppercase;">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 12px;">
+                    <label for="vehicleInfo">Info Tambahan Kendaraan (Tahun / Kilometer saat ini)</label>
+                    <input type="text" id="vehicleInfo" placeholder="Contoh: Tahun 2022, KM 35.000">
+                </div>
+            </div>
+
+            <!-- 3. Jadwal Kedatangan & Keluhan / Layanan -->
+            <div class="form-section">
+                <h3>3. Jadwal Kedatangan & Pilihan Perbaikan</h3>
+                <div class="grid-2-col">
+                    <div class="form-group" style="margin-bottom: 16px;">
+    <label for="workshopBranch">Pilih Cabang Bengkel Tujuan *</label>
+    <select id="workshopBranch" required>
+        <option value="">-- Pilih Cabang DrivePro --</option>
+        <option value="DrivePro Bandung - Soekarno Hatta">Bandung — Jl. Soekarno-Hatta No. 452</option>
+        <option value="DrivePro Jakarta - TB Simatupang">Jakarta — Jl. TB Simatupang Kav. 18</option>
+        <option value="DrivePro Surabaya - Ahmad Yani">Surabaya — Jl. Ahmad Yani No. 112</option>
+    </select>
+</div>
+                    <div class="form-group">
+                        <label for="bookingDate">Tanggal Service *</label>
+                        <input type="date" id="bookingDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingTime">Jam Kedatangan *</label>
+                        <select id="bookingTime" required>
+                            <option value="08:30">08:30 WIB</option>
+                            <option value="09:30">09:30 WIB</option>
+                            <option value="10:30">10:30 WIB</option>
+                            <option value="11:30">11:30 WIB</option>
+                            <option value="13:00">13:00 WIB</option>
+                            <option value="14:00">14:00 WIB</option>
+                            <option value="15:00">15:00 WIB</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 16px;">
+                    <label>Apa yang mau diperbaiki / diservis? (Bisa pilih lebih dari 1) *</label>
+                    <div id="serviceChecklistContainer" class="service-checklist-grid"></div>
+                </div>
+
+                <div class="form-group" style="margin-top: 16px;">
+                    <label for="customerNotes">Catatan / Keluhan Tambahan</label>
+                    <textarea id="customerNotes" rows="3" placeholder="Tuliskan keluhan spesifik pada kendaraan Anda (opsional)..."></textarea>
+                </div>
+            </div>
+
+            <!-- 4. Persetujuan Data -->
+            <div class="form-section consent-box">
+                <label class="checkbox-consent">
+                    <input type="checkbox" id="consentCheckbox" required>
+                    <span>
+                        Saya menyetujui DrivePro untuk menggunakan informasi di atas dan menghubungi saya melalui email dan/atau telepon atau sarana komunikasi pribadi lainnya untuk kegiatan pelayanan kepada customer.
+                    </span>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-primary btn-submit-full">Konfirmasi & Ambil Nomor Antrean</button>
+        </form>
+
+        <!-- Hasil Booking: Kode Antrean, Estimasi Biaya & Waktu, serta Rules -->
+        <!-- Hasil Booking: Kode Antrean, No. Booking (Copy), Estimasi Biaya & Waktu, serta Rules -->
+        <section id="bookingResultSection" class="result-card" style="display: none;">
+            <div class="ticket-header">
+                <span class="ticket-badge">BOOKING BERHASIL</span>
+                <h2>Nomor Antrean Anda</h2>
+                <div class="ticket-code" id="resultQueueCode">A-001</div>
+
+                <!-- KOTAK NO. BOOKING + TOMBOL COPY -->
+                <div style="display: inline-flex; align-items: center; gap: 12px; background: #eff6ff; border: 1.5px solid #bfdbfe; padding: 10px 16px; border-radius: 12px; margin: 10px auto 12px;">
+                    <div style="text-align: left;">
+                        <span style="display: block; font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase;">No. Booking (Untuk Cek Antrean)</span>
+                        <strong id="resultBookingCode" style="font-size: 16px; font-weight: 800; color: #0b2c6b; letter-spacing: 0.4px;">BK-20261121-001</strong>
+                    </div>
+                    <button type="button" id="btnCopyBookingCode" onclick="copyBookingCode()" style="background: #1852b8; color: #ffffff; border: none; border-radius: 8px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer;">
+                        📋 Copy No. Booking
+                    </button>
+                </div>
+
+                <p id="resultCustomerSummary"></p>
+                <div class="dispatch-notification" id="dispatchStatusText"></div>
+                <div class="send-ticket-actions">
+                    <a id="btnSendWhatsapp" href="#" target="_blank" class="btn-wa">📲 Kirim Nomor Antrean ke WhatsApp</a>
+                    <a id="btnSendEmail" href="#" class="btn-email">✉️ Kirim Nomor Antrean ke Email</a>
+                </div>
+            </div>
+
+            <div class="estimation-box">
+                <div class="est-item">
+                    <span>Estimasi Pengeluaran</span>
+                    <strong id="resultEstPrice">Rp 0</strong>
+                </div>
+                <div class="est-item">
+                    <span>Estimasi Waktu Pengerjaan</span>
+                    <strong id="resultEstDuration">0 Menit</strong>
+                </div>
+            </div>
+            <p class="est-disclaimer">
+                *Catatan: Estimasi biaya dan durasi pengerjaan di atas bersifat perkiraan awal dan <strong>dapat berubah sewaktu-waktu</strong> tergantung hasil pemeriksaan serta tingkat kerusakan komponen di bengkel.
+            </p>
+
+            <div class="rules-box">
+                <h4>⚠️ Peraturan & Ketentuan Antrean Bengkel (Wajib Dibaca):</h4>
+                <ul>
+                    <li><strong>Wajib Membawa STNK Asli:</strong> Harap tunjukkan STNK kendaraan beserta kode antrean ini kepada petugas penerima servis saat tiba di bengkel.</li>
+                    <li><strong>Toleransi Keterlambatan 5 Menit:</strong> Apabila nomor antrean Anda dipanggil dan diabaikan lebih dari <strong>5 menit</strong>, maka booking dianggap <strong>hangus</strong> dan Anda harus mendaftar antrean ulang.</li>
+                    <li><strong>Datang 30 Menit Lebih Awal:</strong> Jadwal pengerjaan di bengkel bersifat dinamis (dapat maju lebih cepat atau mundur menyesuaikan kondisi servis kendaraan sebelumnya). Usahakan tiba <strong>30 menit sebelum jadwal</strong> untuk menghindari terlewatnya panggilan antrean.</li>
+                </ul>
+            </div>
+
+            <div class="result-actions">
+                <a href="antrean.html" class="btn-primary">Pantau Antrean Live</a>
+                <button type="button" class="btn-outline" onclick="resetBookingForm()">Buat Booking Baru</button>
+            </div>
+        </section>
+    </main>
+
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <p>&copy; 2026 DrivePro Car Service &amp; Maintenance. All rights reserved.</p>
+            <p>Buka Setiap Hari: 08.00 – 20.00 WIB</p>
+        </div>
+    </footer>
+
+    <!-- MODAL BUKTI BOOKING & NO. ANTREAN -->
+<div id="bookingReceiptModal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(7, 25, 61, 0.58); align-items: center; justify-content: center; z-index: 9999; padding: 20px;">
+    <div style="background: #ffffff; border-radius: 20px; padding: 24px; max-width: 460px; width: 100%; box-shadow: 0 24px 48px rgba(7, 25, 61, 0.25);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-size: 18px; font-weight: 800; color: #0b2c6b; margin: 0;">Booking Berhasil Dikonfirmasi!</h3>
+            <button type="button" onclick="closeBookingReceiptModal()" style="background: none; border: none; font-size: 24px; color: #64748b; cursor: pointer; line-height: 1;">&times;</button>
+        </div>
+
+        <div style="background: #f0f6ff; border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 16px; margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed #bfdbfe;">
+                <span style="font-size: 12.5px; font-weight: 700; color: #475569;">No. Antrean Harian</span>
+                <strong id="recQueueNumber" style="font-size: 22px; font-weight: 800; color: #0b2c6b;">A-001</strong>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                <div>
+                    <span style="display: block; font-size: 11.5px; font-weight: 600; color: #64748b;">No. Booking</span>
+                    <strong id="recBookingCode" style="font-size: 15px; font-weight: 800; color: #1852b8;">BK-20261121-001</strong>
+                </div>
+                <button type="button" id="btnCopyBookingCode" onclick="copyBookingCode()" style="background: #ffffff; border: 1.5px solid #93c5fd; color: #0b2c6b; font-size: 12px; font-weight: 800; padding: 7px 14px; border-radius: 9px; cursor: pointer;">
+                    Copy No. Booking
+                </button>
+            </div>
+        </div>
+
+        <div id="recSummaryDetails" style="font-size: 13px; color: #334155; line-height: 1.7; background: #f8fafd; padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px;"></div>
+
+        <div style="display: flex; gap: 10px;">
+            <a id="btnSendWhatsApp" href="#" target="_blank" rel="noopener" style="flex: 1; text-align: center; background: #16a34a; color: #ffffff; text-decoration: none; font-size: 13px; font-weight: 700; padding: 11px; border-radius: 11px;">
+                Kirim ke WhatsApp
+            </a>
+            <a href="antrean.html" style="flex: 1; text-align: center; background: #0b2c6b; color: #ffffff; text-decoration: none; font-size: 13px; font-weight: 700; padding: 11px; border-radius: 11px;">
+                Cek Antrean &rarr;
+            </a>
+        </div>
+    </div>
+</div>
+
+    <script src="js/data.js"></script>
+    <script src="js/service.js"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: #f5f8fd;
+    color: #0f172a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-navbar {
+    background: #ffffff;
+    border-bottom: 1px solid rgba(16, 60, 140, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.logo-img {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+}
+
+.logo-text strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 800;
+    color: #103c8c;
+    line-height: 1.1;
+}
+
+.logo-text small {
+    font-size: 10px;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.8px;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: #07193d;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 9px 16px;
+    border-radius: 99px;
+    transition: all 0.2s ease;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+    background: #eef4ff;
+    color: #1d63dc;
+}
+
+.container {
+    max-width: 1140px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px;
+    flex: 1;
+}
+
+.panel-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 10px 30px -5px rgba(7, 25, 61, 0.06);
+    border: 1px solid rgba(16, 60, 140, 0.08);
+}
+
+.eyebrow-pill {
+    display: inline-block;
+    background: #eef4ff;
+    color: #103c8c;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 99px;
+    margin-bottom: 8px;
+}
+
+.btn-primary {
+    background: #103c8c;
+    color: #ffffff;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: #1d63dc;
+}
+
+.btn-outline {
+    background: #ffffff;
+    color: #07193d;
+    border: 1.5px solid #cbd5e1;
+    padding: 11px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.site-footer {
+    background: #07193d;
+    color: rgba(255, 255, 255, 0.85);
+    padding: 18px 24px;
+    font-size: 13px;
+    margin-top: auto;
+}
+
+.footer-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}

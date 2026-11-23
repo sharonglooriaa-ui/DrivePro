@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Staff - DrivePro</title>
+    <link rel="stylesheet" href="css/staff-global.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body class="login-body">
+
+    <main class="login-card">
+        <div class="brand-row">
+            <img src="assets/logo.jpg" alt="Logo DrivePro">
+            <div>
+                <strong>DrivePro</strong>
+                <small>YOUR CAR, OUR PRIORITY.</small>
+            </div>
+        </div>
+
+        <span class="eyebrow-pill">STAFF & KASIR PORTAL</span>
+        <h1>Masuk ke Sistem Bengkel</h1>
+        <p>Login menggunakan ID Staff atau Email terdaftar untuk mengakses layanan, antrean, kasir, dan riwayat transaksi.</p>
+
+        <form id="staffLoginForm" class="login-form">
+            <div class="form-group">
+                <label for="staffIdentifier">ID Staff atau Email</label>
+                <input type="text" id="staffIdentifier" placeholder="Contoh: STF-BDG-01 atau rizky@drivepro.co.id" required>
+            </div>
+            <div class="form-group">
+                <label for="staffPassword">Password</label>
+                <input type="password" id="staffPassword" placeholder="Masukkan password" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 6px;">Login & Buka Workspace</button>
+        </form>
+
+        <div class="demo-box">
+            <strong>Akun Demo Staff:</strong><br>
+            • Bandung: <code>STF-BDG-01</code> / <code>rizky@drivepro.co.id</code> (Pass: <code>staff123</code>)<br>
+            • Jakarta: <code>STF-JKT-01</code> / <code>dimas@drivepro.co.id</code> (Pass: <code>staff123</code>)<br>
+            • Surabaya: <code>STF-SBY-01</code> / <code>nadia@drivepro.co.id</code> (Pass: <code>staff123</code>)
+        </div>
+    </main>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

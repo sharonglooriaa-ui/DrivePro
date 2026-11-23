@@ -1,0 +1,255 @@
+/* customer/css/index.css */
+
+.hero-section {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 71px);
+    background-color: #eef4fc;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Foto Mekanik di Sisi Kanan */
+.hero-photo-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 56%;
+    height: 100%;
+    background-image: url('../assets/mas.jpg');
+    background-size: cover;
+    background-position: center 22%;
+    z-index: 1;
+}
+
+/* Potongan Diagonal Putih-Biru Persis Banner */
+.hero-diagonal-layer {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(
+        115deg,
+        #f6f9fe 0%,
+        #eef4fc 47.5%,
+        rgba(220, 234, 255, 0.94) 47.6%,
+        rgba(220, 234, 255, 0.94) 51.8%,
+        #1d63dc 51.9%,
+        #103c8c 54.8%,
+        transparent 54.9%
+    );
+}
+
+/* Posisi Teks Agak ke Kiri (Menggunakan persentase viewport kiri, bukan center) */
+.hero-inner-container {
+    width: 100%;
+    padding: 32px 24px 125px 4.8vw;
+}
+
+.hero-copy-box {
+    max-width: 660px;
+}
+
+.trust-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    background-color: #dce8fc;
+    color: #07193d;
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 7px 18px;
+    border-radius: 99px;
+    margin-bottom: 22px;
+}
+
+.trust-check-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #103c8c;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ukuran & Gaya Judul Persis Banner Referensi */
+.hero-copy-box h1 {
+    font-size: clamp(46px, 5.6vw, 76px);
+    font-weight: 800;
+    line-height: 1.01;
+    letter-spacing: -1.8px;
+    margin-bottom: 24px;
+}
+
+.hero-copy-box h1 .line-top {
+    color: #071d49; /* Biru dongker gelap pada baris pertama */
+}
+
+.hero-copy-box h1 .line-bottom {
+    position: relative;
+    display: inline-block;
+    color: #1045a1; /* Biru utama pada baris kedua */
+    padding-bottom: 14px;
+}
+
+.curved-underline {
+    position: absolute;
+    left: 1%;
+    bottom: -2px;
+    width: 96%;
+    height: 16px;
+}
+
+.hero-copy-box p {
+    font-size: clamp(16px, 1.3vw, 19px);
+    font-weight: 500;
+    color: #1e293b;
+    line-height: 1.5;
+    max-width: 510px;
+}
+
+/* Bar Putih 4 Keunggulan di Bagian Bawah (Lebar Sejajar Kiri-Kanan) */
+.hero-features-wrapper {
+    position: relative;
+    z-index: 4;
+    width: 100%;
+    margin: 0 auto 28px;
+    padding: 0 4.8vw;
+}
+
+.hero-features-bar {
+    background-color: #ffffff;
+    border-radius: 18px;
+    padding: 22px 32px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    box-shadow: 0 16px 36px rgba(7, 25, 61, 0.14);
+}
+
+.hf-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-right: 12px;
+    border-right: 1px solid #e2e8f0;
+}
+
+.hf-item:last-child {
+    border-right: none;
+    padding-right: 0;
+}
+
+.hf-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background-color: #eef4ff;
+    color: #103c8c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.hf-item strong {
+    display: block;
+    font-size: 15.5px;
+    font-weight: 800;
+    color: #07193d;
+}
+
+.hf-item small {
+    display: block;
+    font-size: 12.5px;
+    color: #64748b;
+}
+
+/* Pita Biru Tua Miring di Bagian Dasar */
+.hero-bottom-navy-strip {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 52px;
+    background: linear-gradient(90deg, #07193d 0%, #103c8c 65%, #1d63dc 100%);
+    clip-path: polygon(0 28%, 100% 0%, 100% 100%, 0% 100%);
+    z-index: 3;
+}
+
+/* Section Perawatan Berkala di Bawah Hero */
+.perawatan-section {
+    padding: 64px 0 30px;
+}
+
+.section-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--blue-primary);
+    margin-bottom: 14px;
+}
+
+.section-desc {
+    font-size: 16px;
+    color: var(--text-dark);
+    max-width: 860px;
+    margin-bottom: 36px;
+}
+
+.perawatan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.perawatan-card {
+    background: var(--white);
+    border: 1px solid var(--border-subtle);
+    border-top: 4px solid var(--blue-primary);
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(11, 37, 89, 0.05);
+}
+
+.km-badge {
+    display: inline-block;
+    background-color: var(--blue-soft);
+    color: var(--blue-primary);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+
+.perawatan-card h3 {
+    font-size: 18px;
+    color: var(--blue-dark);
+    margin-bottom: 10px;
+}
+
+.perawatan-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+@media (max-width: 900px) {
+    .hero-photo-right {
+        width: 100%;
+        opacity: 0.2;
+    }
+    .hero-diagonal-layer {
+        background: rgba(244, 248, 254, 0.9);
+    }
+    .hero-features-bar {
+        grid-template-columns: 1fr 1fr;
+    }
+    .hf-item {
+        border-right: none;
+    }
+}

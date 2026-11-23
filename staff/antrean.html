@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Antrean & Kasir - DrivePro Staff</title>
+    <link rel="stylesheet" href="css/staff-global.css">
+    <link rel="stylesheet" href="css/antrean.css">
+</head>
+<body>
+
+    <header class="top-navbar">
+        <div class="nav-container">
+            <a href="antrean.html" class="brand-logo">
+                <img src="assets/logo.jpg" alt="Logo DrivePro" class="logo-img">
+                <div class="logo-text">
+                    <strong>DrivePro</strong>
+                    <small>YOUR CAR, OUR PRIORITY.</small>
+                </div>
+            </a>
+
+            <nav class="main-nav">
+                <a href="service.html">SERVICE</a>
+                <a href="antrean.html" class="active">ANTREAN</a>
+                <a href="riwayat.html">RIWAYAT TRANSAKSI</a>
+                <a href="profil.html">PROFIL STAFF</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="panel-card">
+            <div class="title-bar">
+                <div>
+                    <span class="eyebrow-pill">QUEUE & WORK ORDER</span>
+                    <h2>Daftar Antrean Servis Aktif</h2>
+                    <p>Klik pada kartu antrean untuk melihat detail form, edit servis, tambah sparepart, terapkan promo, atau lanjut ke kasir.</p>
+                </div>
+
+                <select id="queueBranchFilter" onchange="renderQueueList()" class="branch-select">
+                    <option value="ALL">Semua Cabang</option>
+                    <option value="DrivePro Bandung - Soekarno Hatta">DrivePro Bandung</option>
+                    <option value="DrivePro Jakarta - TB Simatupang">DrivePro Jakarta</option>
+                    <option value="DrivePro Surabaya - Ahmad Yani">DrivePro Surabaya</option>
+                </select>
+            </div>
+
+            <div id="queueListContainer" class="queue-stack"></div>
+        </section>
+    </main>
+
+    <!-- MODAL DETAIL FORM & WORK ORDER -->
+    <div id="queueDetailModal" class="modal-overlay" style="display: none;" onclick="closeModal('queueDetailModal')">
+        <div class="modal-box modal-xl" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <span class="pill-code" id="mdQueueCode">BDG-001</span>
+                    <h3 id="mdCustomerHeader" style="margin-top: 6px;">Detail Form & Work Order Servis</h3>
+                </div>
+                <button type="button" class="modal-close-btn" onclick="closeModal('queueDetailModal')">✕</button>
+            </div>
+
+            <div class="md-control-banner">
+                <div id="mdVehicleDetails"></div>
+                <div class="md-schedule-actions">
+                    <button type="button" class="btn-shift" onclick="adjustQueueSchedule(-15)">⏪ Majukan 15m</button>
+                    <span id="mdTimeDisplay" class="time-pill-badge">09:00 - 10:00</span>
+                    <button type="button" class="btn-shift" onclick="adjustQueueSchedule(15)">Mundurkan 15m ⏩</button>
+                    <button type="button" class="btn-danger-soft" onclick="deleteAndAdvanceQueue()">🗑️ Hapus Antrean (Batal)</button>
+                </div>
+            </div>
+
+            <div class="wo-grid">
+                <div>
+                    <div class="wo-card">
+                        <h4>1. Edit Jenis Service Aktual</h4>
+                        <p class="hint-sm">Sesuaikan tindakan perbaikan berdasarkan pengecekan aktual teknisi.</p>
+                        <div id="mdServiceChecklist" class="check-grid-sm"></div>
+                        <div class="form-group" style="margin-top: 10px;">
+                            <label>Catatan Diagnosa Mekanik</label>
+                            <input type="text" id="mdTechNotes" placeholder="Contoh: Aki lemah, diganti aki baru.">
+                        </div>
+                    </div>
+
+                    <div class="wo-card" style="margin-top: 16px;">
+                        <h4>2. Tambah Sparepart Diganti (Khusus Mobil <span id="mdEngineTypeLabel">Bensin</span>)</h4>
+                        <div class="part-picker">
+                            <select id="mdSparepartDropdown"></select>
+                            <input type="number" id="mdSparepartQty" value="1" min="1" max="10">
+                            <button type="button" class="btn-primary" onclick="addPartItem()">+ Tambah</button>
+                        </div>
+                        <ul id="mdAddedPartsList" class="parts-ul"></ul>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="wo-card">
+                        <h4>3. Promo Member Tersedia</h4>
+                        <p class="hint-sm" style="margin-bottom: 10px;">Berwarna <strong>abu-abu</strong> jika syarat belum terpenuhi, berubah <strong>biru</strong> saat memenuhi ketentuan.</p>
+                        <div id="mdPromoCardsContainer"></div>
+                    </div>
+
+                    <div class="wo-card total-box" style="margin-top: 16px;">
+                        <h4>4. Kalkulasi Harga & Pembayaran Kasir</h4>
+                        <div class="price-row"><span>Total Jasa Servis</span><strong id="sumServiceText">Rp 0</strong></div>
+                        <div class="price-row"><span>Total Sparepart</span><strong id="sumPartText">Rp 0</strong></div>
+                        <div class="price-row promo-deduct"><span>Potongan Promo</span><strong id="sumDiscountText">- Rp 0</strong></div>
+                        <div class="price-row final-price"><span>TOTAL TAGIHAN FIX</span><strong id="sumGrandTotalText">Rp 0</strong></div>
+
+                        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
+                            <button type="button" class="btn-outline" onclick="saveQueueChangesOnly()">Simpan Update Sementara</button>
+                            <button type="button" class="btn-primary" onclick="proceedToCashier()">💳 Harga Fix & Lanjut ke Kasir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL KASIR & WHATSAPP STRUK -->
+    <div id="cashierModal" class="modal-overlay" style="display: none;" onclick="closeModal('cashierModal')">
+        <div class="modal-box modal-md" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>💳 Pembayaran Kasir DrivePro</h3>
+                <button type="button" class="modal-close-btn" onclick="closeModal('cashierModal')">✕</button>
+            </div>
+
+            <div id="cashierBillSummary" class="cashier-summary"></div>
+
+            <div id="cashierPaymentFormArea">
+                <div class="form-group" style="margin-top: 14px;">
+                    <label>Metode Pembayaran *</label>
+                    <select id="paymentMethodSelect" onchange="toggleCashInput()">
+                        <option value="Tunai (Cash)">Tunai (Cash)</option>
+                        <option value="QRIS DrivePro">QRIS DrivePro</option>
+                        <option value="Transfer Virtual Account">Transfer Virtual Account</option>
+                        <option value="Kartu Debit / Kredit">Kartu Debit / Kredit</option>
+                    </select>
+                </div>
+
+                <div id="cashReceivedGroup" class="form-group" style="margin-top: 12px;">
+                    <label>Uang Diterima dari Customer (Rp)</label>
+                    <input type="number" id="cashReceivedInput" oninput="calculateChangeAmount()">
+                    <small id="cashChangeDisplay" style="color: #059669; font-weight: 700;"></small>
+                </div>
+
+                <div class="form-group" style="margin-top: 12px;">
+                    <label>Nomor WhatsApp Tujuan Struk Digital *</label>
+                    <input type="text" id="waReceiptPhoneInput" placeholder="Contoh: 081234567890" required>
+                </div>
+
+                <button type="button" class="btn-primary" style="width: 100%; margin-top: 18px;" onclick="confirmPaymentAndGenerateReceipt()">
+                    ✅ Konfirmasi Pembayaran Lunas
+                </button>
+            </div>
+
+            <div id="paidReceiptSuccessArea" style="display: none;">
+                <div id="finalReceiptPreview" class="receipt-sheet"></div>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 16px;">
+                    <a id="sendWhatsappBtn" href="#" target="_blank" class="btn-wa">📲 Kirim Struk ke WhatsApp Customer</a>
+                    <button type="button" class="btn-outline" onclick="closeModal('cashierModal')">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <p>&copy; 2026 DrivePro — Your Car, Our Priority.</p>
+            <p>Staff & Workshop Operations Portal</p>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/antrean.js"></script>
+</body>
+</html>

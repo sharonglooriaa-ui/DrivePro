@@ -1,0 +1,186 @@
+/* css/global.css */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --blue-dark: #07193d;
+    --blue-primary: #103c8c;
+    --blue-accent: #1d63dc;
+    --blue-soft: #eef4ff;
+    --bg-page: #f5f8fd;
+    --white: #ffffff;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --border-subtle: rgba(16, 60, 140, 0.09);
+    --shadow-soft: 0 10px 30px -5px rgba(7, 25, 61, 0.06);
+    --shadow-hover: 0 18px 36px -8px rgba(16, 60, 140, 0.14);
+    --success-bg: #dcfce7;
+    --success-text: #15803d;
+    --warning-bg: #fef3c7;
+    --warning-text: #b45309;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-page);
+    color: var(--text-dark);
+    line-height: 1.65;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+main {
+    flex: 1;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Navbar Glassmorphism Elegan */
+.top-navbar {
+    background-color: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.logo-img {
+    height: 42px;
+    width: auto;
+    object-fit: contain;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+}
+
+.logo-text strong {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--blue-primary);
+    letter-spacing: -0.2px;
+}
+
+.logo-text small {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.8px;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    padding: 8px 14px;
+    border-radius: 99px;
+    transition: all 0.25s ease;
+}
+
+.main-nav a:hover {
+    color: var(--blue-primary);
+    background-color: var(--blue-soft);
+}
+
+.main-nav a.active {
+    color: var(--blue-primary);
+    background-color: var(--blue-soft);
+}
+
+/* Tombol Elegan */
+.btn-primary {
+    background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-accent) 100%);
+    color: var(--white);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(29, 99, 220, 0.25);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(29, 99, 220, 0.35);
+}
+
+.btn-outline {
+    background-color: var(--white);
+    color: var(--blue-primary);
+    border: 1.5px solid #cbd5e1;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+    border-color: var(--blue-primary);
+    background-color: var(--blue-soft);
+}
+
+/* Footer Minimalis */
+.site-footer {
+    background-color: var(--blue-dark);
+    color: rgba(255, 255, 255, 0.82);
+    padding: 28px 0;
+    font-size: 13px;
+    margin-top: 0 !important;
+}
+
+.footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}

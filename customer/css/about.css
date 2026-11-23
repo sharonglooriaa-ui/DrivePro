@@ -1,0 +1,530 @@
+/* customer/css/about.css */
+
+.about-page {
+    background: linear-gradient(180deg, #f3f7fe 0%, #eef4fc 50%, #e7f0fd 100%);
+    padding-bottom: 72px;
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   1. HERO SECTION & 3D PODIUM CAROUSEL
+   ========================================================= */
+.about-hero-section {
+    position: relative;
+    padding: 54px 0 36px;
+}
+
+.about-hero-grid {
+    display: grid;
+    grid-template-columns: 0.92fr 1.08fr;
+    gap: 28px;
+    align-items: center;
+}
+
+.pill-badge-outline {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 99px;
+    border: 1px solid #bfdbfe;
+    background: rgba(255, 255, 255, 0.75);
+    color: #103c8c;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+.about-hero-text h1 {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: #0b2c6b;
+    margin-bottom: 16px;
+}
+
+.about-hero-text .highlight-italic {
+    font-style: italic;
+    color: #1d63dc;
+}
+
+.about-hero-text p {
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: #334155;
+    max-width: 410px;
+    margin-bottom: 28px;
+}
+
+.btn-hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(135deg, #0b337a 0%, #1652bd 100%);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14.5px;
+    font-weight: 700;
+    padding: 12px 24px;
+    border-radius: 99px;
+    box-shadow: 0 10px 24px rgba(16, 60, 140, 0.24);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-hero-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(16, 60, 140, 0.32);
+}
+
+.btn-circle-arrow {
+    font-size: 16px;
+    font-weight: 800;
+}
+
+/* Stage 3D Carousel */
+.about-carousel-stage {
+    position: relative;
+    height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-track-3d {
+    position: relative;
+    width: 100%;
+    height: 290px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+}
+
+.c3d-card {
+    position: absolute;
+    width: 310px;
+    height: 255px;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #ffffff;
+    border: 3px solid #ffffff;
+    box-shadow: 0 18px 36px rgba(7, 25, 61, 0.16);
+    transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+}
+
+.c3d-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Posisi Aktif (Tengah Depan) */
+.c3d-card.active {
+    transform: translateX(0) scale(1.06);
+    z-index: 5;
+    opacity: 1;
+}
+
+/* Posisi Samping Kiri */
+.c3d-card.prev {
+    transform: translateX(-165px) scale(0.84) perspective(700px) rotateY(14deg);
+    z-index: 2;
+    opacity: 0.88;
+}
+
+/* Posisi Samping Kanan */
+.c3d-card.next {
+    transform: translateX(165px) scale(0.84) perspective(700px) rotateY(-14deg);
+    z-index: 2;
+    opacity: 0.88;
+}
+
+/* Tombol Panah Kiri/Kanan */
+.carousel-nav-btn {
+    position: absolute;
+    top: 46%;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #dbeafe;
+    color: #103c8c;
+    font-size: 22px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 6px 18px rgba(16, 60, 140, 0.14);
+    transition: all 0.2s ease;
+}
+
+.carousel-nav-btn:hover {
+    background: #103c8c;
+    color: #ffffff;
+}
+
+.carousel-nav-btn.prev { left: 6px; }
+.carousel-nav-btn.next { right: 6px; }
+
+/* Podium Cincin Elips 3D di Bawah Kartu */
+.carousel-podium-ring {
+    position: absolute;
+    bottom: 24px;
+    width: 92%;
+    height: 68px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.92) 45%, rgba(186, 211, 250, 0.8) 85%, rgba(147, 187, 248, 0.95) 100%);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-shadow:
+        0 14px 28px rgba(29, 99, 220, 0.18),
+        inset 0 4px 12px rgba(255, 255, 255, 0.95);
+    z-index: 1;
+}
+
+/* Dots Indikator */
+.carousel-dots {
+    position: absolute;
+    bottom: -2px;
+    display: flex;
+    gap: 8px;
+    z-index: 6;
+}
+
+.cdot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: #cbd5e1;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s ease;
+}
+
+.cdot.active {
+    background: #103c8c;
+    transform: scale(1.25);
+}
+
+/* =========================================================
+   2. CORE VALUES GLASS BAR (3 KOLOM)
+   ========================================================= */
+.values-strip-wrapper {
+    margin-top: 24px;
+    margin-bottom: 48px;
+}
+
+.values-glass-bar {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 24px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    box-shadow: 0 10px 30px rgba(16, 60, 140, 0.05);
+}
+
+.val-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
+
+.val-icon-box {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.val-item h4 {
+    font-size: 16px;
+    font-weight: 800;
+    color: #0b2c6b;
+    margin-bottom: 3px;
+}
+
+.val-item p {
+    font-size: 13px;
+    color: #475569;
+}
+
+.val-divider {
+    width: 1px;
+    height: 44px;
+    background: rgba(16, 60, 140, 0.14);
+}
+
+/* =========================================================
+   3. OUR BRANCHES SECTION
+   ========================================================= */
+.branches-layout {
+    display: grid;
+    grid-template-columns: 0.72fr 1.28fr;
+    gap: 28px;
+    align-items: center;
+}
+
+.eyebrow-line-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.eyebrow-line-group .pill-badge-outline {
+    margin-bottom: 0;
+}
+
+.short-blue-line {
+    width: 36px;
+    height: 2px;
+    background: #93c5fd;
+    border-radius: 99px;
+}
+
+.branches-intro h2 {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.18;
+    color: #0b2c6b;
+    margin-bottom: 14px;
+}
+
+.branches-intro p {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: #334155;
+    margin-bottom: 26px;
+}
+
+.branches-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.branch-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 10px 10px 18px;
+    border: 1px solid rgba(16, 60, 140, 0.08);
+    box-shadow: 0 12px 28px rgba(7, 25, 61, 0.06);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.branch-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 34px rgba(16, 60, 140, 0.12);
+}
+
+.branch-photo-wrap {
+    width: 100%;
+    height: 138px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.branch-photo-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.branch-card-body {
+    padding: 0 8px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.branch-title-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14.5px;
+    font-weight: 800;
+    color: #0b2c6b;
+    margin-bottom: 10px;
+}
+
+.branch-meta-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 12px;
+    color: #475569;
+    flex: 1;
+}
+
+.branch-meta-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.45;
+}
+
+.branch-meta-list svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.btn-view-branch {
+    width: 100%;
+    background: #f8fafd;
+    border: 1px solid #cbd5e1;
+    color: #1852b8;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 9px 14px;
+    border-radius: 99px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-view-branch:hover {
+    background: #103c8c;
+    color: #ffffff;
+    border-color: #103c8c;
+}
+
+/* Modal Detail Cabang */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 25, 61, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.modal-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 20px 44px rgba(7, 25, 61, 0.22);
+}
+
+.modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.modal-head h3 {
+    font-size: 19px;
+    font-weight: 800;
+    color: #0b2c6b;
+}
+
+.modal-close-x {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.modal-branch-banner {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 14px;
+}
+
+.modal-branch-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13.5px;
+    color: #334155;
+    margin-bottom: 18px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-outline-pill {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    padding: 10px 18px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+    .about-hero-grid,
+    .branches-layout {
+        grid-template-columns: 1fr;
+    }
+    .values-glass-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .val-divider {
+        width: 100%;
+        height: 1px;
+    }
+    .branches-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Podium Cincin 3D Lebih Tegas */
+.carousel-podium-ring {
+    position: absolute;
+    bottom: 20px;
+    width: 96%;
+    height: 76px;
+    border-radius: 50%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.96) 42%,
+        rgba(180, 208, 252, 0.88) 76%,
+        rgba(116, 166, 247, 0.95) 100%
+    );
+    border: 2.5px solid #ffffff;
+    box-shadow:
+        0 16px 32px rgba(16, 60, 140, 0.2),
+        inset 0 6px 14px rgba(255, 255, 255, 1);
+    z-index: 1;
+}
+
+body {
+    background-color: #eef4fc;
+}
+
+footer {
+    margin-top: 0 !important;
+}

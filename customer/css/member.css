@@ -1,0 +1,878 @@
+/* customer/css/member.css */
+
+.member-page {
+    padding-top: 36px;
+    padding-bottom: 48px;
+}
+
+/* =========================================================
+   1. SPLIT LAYOUT LOGIN / DAFTAR + OTP
+   ========================================================= */
+.member-split-layout {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 32px;
+    align-items: stretch;
+}
+
+.benefit-banner {
+    background: linear-gradient(135deg, #07193d 0%, #103c8c 65%, #1d63dc 100%);
+    color: #ffffff;
+    border-radius: 22px;
+    padding: 40px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: var(--shadow-soft);
+}
+
+.benefit-eyebrow {
+    display: inline-block;
+    width: fit-content;
+    background: rgba(255, 255, 255, 0.16);
+    color: #dbeafe;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 5px 14px;
+    border-radius: 99px;
+    margin-bottom: 14px;
+}
+
+.benefit-banner h1 {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 12px;
+}
+
+.benefit-banner > p {
+    font-size: 14.5px;
+    color: rgba(255, 255, 255, 0.86);
+    margin-bottom: 28px;
+}
+
+.benefit-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.benefit-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 14px;
+    padding: 14px 18px;
+}
+
+.benefit-item strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 3px;
+}
+
+.benefit-item span {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.auth-card {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 34px;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-soft);
+}
+
+.auth-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 22px;
+}
+
+.tab-btn {
+    border: none;
+    background: transparent;
+    padding: 10px;
+    border-radius: 9px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+    background: #ffffff;
+    color: var(--blue-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.form-group input,
+.form-group select {
+    padding: 11px 14px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.hint-text {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.otp-box {
+    text-align: center;
+    padding: 12px 0;
+}
+
+.otp-box h3 {
+    font-size: 20px;
+    color: var(--blue-dark);
+    margin-bottom: 6px;
+}
+
+.otp-box p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+.otp-demo-alert {
+    background: var(--blue-soft);
+    border: 1px dashed var(--blue-accent);
+    color: var(--blue-primary);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+/* =========================================================
+   2. DASHBOARD MEMBERSHIP HERO CARD
+   ========================================================= */
+.page-top-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.page-title-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.blue-bar-accent {
+    width: 4px;
+    height: 22px;
+    background: var(--blue-accent);
+    border-radius: 99px;
+}
+
+.page-title-left h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--blue-dark);
+}
+
+.btn-logout-subtle {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: var(--text-muted);
+    padding: 7px 14px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-logout-subtle:hover {
+    color: #b91c1c;
+    border-color: #fca5a5;
+}
+
+.member-hero-card {
+    position: relative;
+    background: linear-gradient(110deg, #edf3fc 0%, #f7faff 58%, #dce9fc 100%);
+    border: 1px solid rgba(29, 99, 220, 0.14);
+    border-radius: 20px;
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(16, 60, 140, 0.06);
+    margin-bottom: 22px;
+    min-height: 142px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.mh-left-group {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: nowrap;
+}
+
+.mh-profile-side {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-shrink: 0;
+}
+
+.mh-avatar-circle {
+    position: relative;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: #d7e5fb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.mh-edit-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #1d63dc;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mh-user-details h3 {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--blue-dark);
+    margin-bottom: 4px;
+}
+
+.mh-user-details p {
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.5;
+}
+
+.mh-contact-line {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.mh-divider {
+    width: 1px;
+    height: 64px;
+    background: rgba(16, 60, 140, 0.15);
+    flex-shrink: 0;
+}
+
+.mh-points-side {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+.mh-star-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #103c8c, #1d63dc);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px rgba(29, 99, 220, 0.28);
+    flex-shrink: 0;
+}
+
+.pts-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.pts-value strong {
+    font-size: 28px;
+    font-weight: 800;
+    color: #103c8c;
+}
+
+.pts-value span {
+    font-size: 16px;
+    font-weight: 700;
+    color: #103c8c;
+}
+
+.pts-link {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1d63dc;
+    text-decoration: none;
+}
+
+/* Mobil di Pojok Kanan: Utuh & Proporsional */
+.mh-car-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: auto;
+    bottom: 0;
+    width: 420px;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.mh-car-graphic {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 85% center;
+    mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.15) 18%,
+        rgba(0, 0, 0, 0.75) 45%,
+        black 72%
+    );
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.15) 18%,
+        rgba(0, 0, 0, 0.75) 45%,
+        black 72%
+    );
+}
+
+/* =========================================================
+   3. 4 SUB-TAB PILLS
+   ========================================================= */
+.member-subnav-pills {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+}
+
+.subpill {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.subpill:hover {
+    border-color: #1d63dc;
+    color: #1d63dc;
+}
+
+.subpill.active {
+    background: linear-gradient(135deg, #103c8c 0%, #1d63dc 100%);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 6px 16px rgba(29, 99, 220, 0.25);
+}
+
+/* =========================================================
+   4. GRID 2 KOLOM KONSISTEN DI SEMUA TAB (50% : 50%)
+   ========================================================= */
+.subtab-panel {
+    width: 100%;
+}
+
+.overview-two-col {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    align-items: start;
+    width: 100%;
+}
+
+.ov-left-col,
+.ov-right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+    width: 100%;
+}
+
+.dash-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 24px 26px;
+    border: 1px solid rgba(16, 60, 140, 0.08);
+    box-shadow: 0 8px 24px rgba(7, 25, 61, 0.04);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dash-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.dash-card-head h4 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--blue-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dash-card-head a {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #1d63dc;
+    text-decoration: none;
+}
+
+/* Service History Summary Box */
+.summary-split-box {
+    background: #f8fafd;
+    border: 1px solid #edf2f7;
+    border-radius: 14px;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 32px;
+}
+
+.sum-stat {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.sum-icon-solid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sum-stat .sum-big-count {
+    display: block;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--blue-dark);
+}
+
+.sum-stat .sum-date-text {
+    display: block;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--blue-dark);
+}
+
+.sum-stat small {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.sum-v-line {
+    width: 1px;
+    height: 46px;
+    background: #cbd5e1;
+    margin: 0 4px;
+}
+
+/* =========================================================
+   5. MY VEHICLES (PREVIEW & FULL TAB)
+   ========================================================= */
+.ov-vehicle-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.vehicle-mini-row,
+.vehicle-full-card {
+    background: #f8fafd;
+    border: 1px solid #edf2f7;
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.veh-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+}
+
+.veh-thumb {
+    width: 92px;
+    height: 58px;
+    border-radius: 10px;
+    background: #eef4fc;
+    border: 1px solid #dbeafe;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.veh-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.fuel-pill {
+    display: inline-block;
+    background: #e0edff;
+    color: #103c8c;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 99px;
+    margin-left: 8px;
+}
+
+.btn-delete-veh {
+    background: transparent;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-delete-veh:hover {
+    background: #fef2f2;
+}
+
+/* =========================================================
+   6. TRANSACTION HISTORY (PREVIEW & FULL TAB)
+   ========================================================= */
+.recent-tx-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.rtx-item,
+.tx-full-row {
+    display: grid;
+    grid-template-columns: 95px 1fr auto auto;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: #f8fafd;
+    border: 1px solid #edf2f7;
+    border-radius: 12px;
+    font-size: 13px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.rtx-date { color: var(--text-muted); font-size: 12px; }
+.rtx-service { font-weight: 700; color: var(--blue-dark); }
+.rtx-price { font-weight: 800; color: var(--blue-dark); }
+
+.badge-completed {
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 11px;
+    border-radius: 99px;
+}
+
+.badge-progress {
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 11px;
+    border-radius: 99px;
+}
+
+.tx-filter-pills {
+    display: flex;
+    gap: 8px;
+}
+
+.tx-filter-btn {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.tx-filter-btn.active {
+    background: #103c8c;
+    color: #ffffff;
+    border-color: #103c8c;
+}
+
+/* =========================================================
+   7. VOUCHERS & REDEEM POINTS
+   ========================================================= */
+.featured-voucher-ticket {
+    position: relative;
+    background: linear-gradient(135deg, #09255c 0%, #1246a8 55%, #1d63dc 100%);
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 22px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    overflow: hidden;
+    margin-bottom: 18px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.featured-voucher-ticket::before,
+.featured-voucher-ticket::after {
+    content: "";
+    position: absolute;
+    right: 34%;
+    width: 18px;
+    height: 18px;
+    background: #ffffff;
+    border-radius: 50%;
+}
+
+.featured-voucher-ticket::before { top: -9px; }
+.featured-voucher-ticket::after { bottom: -9px; }
+
+.vt-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+}
+
+.vt-tag-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #103c8c;
+    font-size: 20px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-10deg);
+    flex-shrink: 0;
+}
+
+.vt-eyebrow {
+    display: block;
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.vt-big-num {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.05;
+}
+
+.vt-big-num span {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.vt-perforation {
+    width: 1px;
+    height: 82px;
+    border-right: 2px dashed rgba(255, 255, 255, 0.35);
+    flex-shrink: 0;
+}
+
+.vt-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.vt-valid small {
+    display: block;
+    font-size: 11px;
+    opacity: 0.85;
+}
+
+.vt-valid strong {
+    font-size: 13.5px;
+}
+
+.btn-use-voucher {
+    background: #ffffff;
+    color: #103c8c;
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 800;
+    padding: 8px 18px;
+    border-radius: 99px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    white-space: nowrap;
+}
+
+.voucher-tnc-box {
+    font-size: 13px;
+    color: #475569;
+}
+
+.voucher-tnc-box strong {
+    display: block;
+    color: var(--blue-dark);
+    margin-bottom: 6px;
+}
+
+.voucher-tnc-box ul {
+    padding-left: 18px;
+    line-height: 1.7;
+}
+
+.redeem-card {
+    background: #f8fafd;
+    border: 1px solid #edf2f7;
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.pts-pill-badge {
+    background: #eff6ff;
+    color: #103c8c;
+    border: 1px solid #bfdbfe;
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 25, 61, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.modal-box {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 28px;
+    max-width: 440px;
+    width: 100%;
+}
+
+@media (max-width: 960px) {
+    .member-split-layout,
+    .overview-two-col {
+        grid-template-columns: 1fr;
+    }
+    .mh-left-group { flex-wrap: wrap; }
+    .mh-divider, .mh-car-wrapper { display: none; }
+    .rtx-item, .tx-full-row { grid-template-columns: 1fr; }
+    .featured-voucher-ticket::before, .featured-voucher-ticket::after { display: none; }
+}
+
+/* Kunci Lebar Kontainer & Anti-Geser Scrollbar Antar Tab */
+html {
+    overflow-y: scroll;
+}
+
+.container.member-page {
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-sizing: border-box !important;
+}
+
+#memberDashboardSection {
+    width: 100% !important;
+    display: block;
+}

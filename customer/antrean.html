@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Antrean - DrivePro AutoCare</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/antrean.css?v=9">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="top-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <img src="assets/logo.jpg" alt="Logo DrivePro" class="logo-img">
+                <div class="logo-text">
+                    <strong>DrivePro</strong>
+                    <small>YOUR CAR, OUR PRIORITY.</small>
+                </div>
+            </a>
+
+            <nav class="main-nav">
+                <a href="service.html">SERVICE</a>
+                <a href="member.html">MEMBER</a>
+                <a href="antrean.html" class="active">CEK ANTREAN</a>
+                <a href="about.html">ABOUT US</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="antrean-wrapper">
+        <!-- =========================================================
+             1. HERO BANNER + CUSTOM BRANCH DROPDOWN
+             ========================================================= -->
+        <section class="antrean-hero-band">
+            <div class="hero-workshop-bg">
+                <img id="heroBranchPhoto" src="assets/branch-center.jpg" alt="DrivePro Workshop" onerror="this.src='assets/HD2.png'">
+            </div>
+
+            <div class="container hero-band-inner">
+                <div class="hero-left-copy">
+                    <div class="custom-branch-dropdown" id="branchDropdownWrapper">
+                        <button type="button" class="branch-trigger-btn" onclick="toggleBranchDropdown()" aria-expanded="false">
+                            <span class="bt-pin-icon">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="#1852b8">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                </svg>
+                            </span>
+                            <span id="selectedBranchLabel">DrivePro Bandung</span>
+                            <svg class="bt-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0b2c6b" stroke-width="2.5">
+                                <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+
+                        <div class="branch-dropdown-menu" id="branchDropdownMenu">
+                            <button type="button" class="branch-option active" data-branch="bandung" onclick="selectCustomBranch('bandung', 'DrivePro Bandung', this)">
+                                <div class="bo-left">
+                                    <strong>DrivePro Bandung</strong>
+                                    <small>Jl. Soekarno Hatta No. 452</small>
+                                </div>
+                                <span class="bo-bay-tag">6 Bay</span>
+                            </button>
+
+                            <button type="button" class="branch-option" data-branch="jakarta" onclick="selectCustomBranch('jakarta', 'DrivePro Jakarta', this)">
+                                <div class="bo-left">
+                                    <strong>DrivePro Jakarta</strong>
+                                    <small>Jl. TB Simatupang Kav. 18</small>
+                                </div>
+                                <span class="bo-bay-tag">8 Bay</span>
+                            </button>
+
+                            <button type="button" class="branch-option" data-branch="surabaya" onclick="selectCustomBranch('surabaya', 'DrivePro Surabaya', this)">
+                                <div class="bo-left">
+                                    <strong>DrivePro Surabaya</strong>
+                                    <small>Jl. Ahmad Yani No. 112</small>
+                                </div>
+                                <span class="bo-bay-tag">5 Bay</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <h1>
+                        Cek Antrian Bengkel<br>
+                        <strong id="heroBranchTitle">DrivePro Bandung</strong>
+                    </h1>
+                    <p>Pantau status layanan kendaraan Anda<br>secara real-time dan transparan.</p>
+                    <div class="blue-short-dash"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             2. KONTEN UTAMA
+             ========================================================= -->
+        <div class="container antrean-main-content">
+            <!-- 3 KARTU STATISTIK (SELALU TAMPIL PUBLIK) -->
+            <section class="stats-three-grid">
+                <div class="stat-pill-card">
+                    <div class="stat-circle-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="#1852b8">
+                            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-text-col">
+                        <span class="st-title">Sedang Dikerjakan</span>
+                        <div class="st-count"><strong id="statInProgress">2</strong> <span>Mobil</span></div>
+                        <div class="st-progress-track"><span id="barInProgress" style="width: 40%;"></span></div>
+                    </div>
+                </div>
+
+                <div class="stat-pill-card">
+                    <div class="stat-circle-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="#1852b8">
+                            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-text-col">
+                        <span class="st-title">Dipanggil ke Bay</span>
+                        <div class="st-count"><strong id="statCalled">1</strong> <span>Mobil</span></div>
+                        <div class="st-progress-track"><span id="barCalled" style="width: 25%;"></span></div>
+                    </div>
+                </div>
+
+                <div class="stat-pill-card">
+                    <div class="stat-circle-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="#1852b8">
+                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-text-col">
+                        <span class="st-title">Menunggu Giliran</span>
+                        <div class="st-count"><strong id="statWaiting">0</strong> <span>Mobil</span></div>
+                        <div class="st-progress-track"><span id="barWaiting" style="width: 10%;"></span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PANEL KIRI & KANAN -->
+            <section class="panels-two-col">
+                <!-- KIRI: PANEL STATUS ANTRIAN ANDA (TERKUNCI SEBELUM ISI NO. HP / NO. BOOKING) -->
+                <div class="navy-header-card">
+                    <div class="nhc-top">
+                        <div class="nhc-title">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                            <span>Status Antrian Anda</span>
+                            <span class="live-indicator-badge" id="liveBadgeIndicator" style="display: none;">
+                                <i class="pulse-dot"></i> LIVE
+                            </span>
+                        </div>
+                        <button type="button" class="ticket-pill-btn" id="myQueueNumberBadge" style="display: none;" onclick="resetBookingLookup()" title="Ganti / Keluar dari tiket ini">
+                            A-015 &times;
+                        </button>
+                    </div>
+
+                    <!-- STATE A: BELUM ISI NO. HP / NO. BOOKING -->
+                    <div id="lookupFormState" class="lookup-state-wrap">
+                        <div class="lookup-intro">
+                            <div class="lookup-lock-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="#1852b8">
+                                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3>Cek Status Kendaraan Anda</h3>
+                                <p>Masukkan <strong>No. HP</strong> atau <strong>No. Booking</strong> yang terdaftar untuk melacak progres bay &amp; mengaktifkan notifikasi panggilan.</p>
+                            </div>
+                        </div>
+
+                        <form class="lookup-input-row" onsubmit="handleBookingLookup(event)">
+                            <input type="text" id="bookingLookupInput" placeholder="Contoh: 08123456789 atau BK-20261121-015" required>
+                            <button type="submit" class="btn-lookup-submit">Cek Status</button>
+                        </form>
+
+                        <p id="lookupErrorMsg" class="lookup-error-msg" style="display: none;"></p>
+
+                        <div class="lookup-bottom-links">
+                            <span>Belum reservasi? <a href="service.html">Booking Servis Sekarang</a></span>
+                        </div>
+                    </div>
+
+                    <!-- STATE B: SUDAH TERVERIFIKASI (TAMPIL STATUS LIVE + STEPPER + MULTI-VEHICLE TABS) -->
+                    <div id="verifiedStatusState" class="nhc-body my-status-col-wrap" style="display: none;">
+                        <!-- Tab Pemilih Kendaraan (Muncul otomatis jika 1 No. HP punya > 1 servis aktif) -->
+                        <div id="multiVehicleTabs" class="multi-vehicle-tabs" style="display: none;"></div>
+
+                        <div class="my-status-layout">
+                            <div class="donut-ring" id="myStatusRing">
+                                <div class="donut-center">
+                                    <svg width="36" height="36" viewBox="0 0 24 24" fill="#1852b8">
+                                        <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="status-copy-col">
+                                <h3 id="myStatusHeadline">Sedang Dipanggil ke Bay</h3>
+                                <p id="myStatusDesc">Mohon menunggu mobil Anda dipindahkan ke Bay 1.</p>
+
+                                <div class="est-badge-box">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="#1852b8">
+                                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                    </svg>
+                                    <span>Estimasi Waktu</span>
+                                    <strong id="myEstTime">± 10 Menit</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEPPER 4 TAHAP -->
+                        <div class="queue-stepper" id="queueStepperBar">
+                            <div class="qstep done" data-step="0">
+                                <span class="qstep-node">&#10003;</span>
+                                <small>Menunggu</small>
+                            </div>
+                            <div class="qstep-line done"></div>
+                            <div class="qstep active" data-step="1">
+                                <span class="qstep-node">2</span>
+                                <small>Dipanggil</small>
+                            </div>
+                            <div class="qstep-line"></div>
+                            <div class="qstep" data-step="2">
+                                <span class="qstep-node">3</span>
+                                <small>Dikerjakan</small>
+                            </div>
+                            <div class="qstep-line"></div>
+                            <div class="qstep" data-step="3">
+                                <span class="qstep-node">4</span>
+                                <small>Selesai</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KANAN: DAFTAR ANTREAN PER BAY -->
+                <div class="navy-header-card">
+                    <div class="nhc-top">
+                        <div class="nhc-title">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff">
+                                <path d="M19 9.3V4h-3v2.6L12 3 2 12h3v8h5v-6h4v6h5v-8h3l-3-2.7z"/>
+                            </svg>
+                            <span>Daftar Antrean per Bay</span>
+                        </div>
+                        <button type="button" class="detail-pill-btn" onclick="openBayDetailModal()">
+                            Lihat Detail
+                        </button>
+                    </div>
+
+                    <div class="nhc-body bays-slot-grid" id="baysGridContainer"></div>
+                </div>
+            </section>
+
+            <!-- FOOTER STATUS BAR -->
+            <section class="bottom-refresh-bar">
+                <div class="brb-left">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#1852b8">
+                        <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                    </svg>
+                    <span>Update terakhir: <strong id="lastUpdatedTime">-</strong></span>
+                </div>
+                <div class="brb-actions">
+                    <button type="button" class="btn-simulate-pill" id="btnSimulateDemo" style="display: none;" onclick="simulateNextProgress()">
+                        &#9889; Simulasi Update
+                    </button>
+                    <button type="button" class="btn-refresh-pill" onclick="refreshQueueNow()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                            <path d="M23 4v6h-6M1 20v-6h6" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- MODAL DETAIL ANTREAN -->
+    <div id="bayDetailModal" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3 id="modalDetailTitle">Detail Antrean &amp; Pengerjaan Bay</h3>
+                <button type="button" class="modal-close-x" onclick="closeBayDetailModal()">&times;</button>
+            </div>
+            <div id="modalBayDetailList" class="modal-detail-list"></div>
+        </div>
+    </div>
+
+    <!-- FLOATING NOTIFICATION DOCK (MUNCUL HANYA SETELAH BOOKING TERVERIFIKASI) -->
+    <div class="floating-notif-dock" id="notifBellWrapper" style="display: none;">
+        <div id="liveToastContainer" class="live-toast-container"></div>
+
+        <div class="notif-dropdown-panel" id="notifDropdownPanel">
+            <div class="ndp-header">
+                <strong>Notifikasi Layanan</strong>
+                <button type="button" onclick="markAllNotifRead()">Tandai dibaca</button>
+            </div>
+            <div class="ndp-list" id="notifHistoryList"></div>
+        </div>
+
+        <button type="button" class="floating-bell-btn" onclick="toggleNotifPanel()" aria-label="Notifikasi Antrean" title="Riwayat Notifikasi Antrean">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="notif-badge-count" id="notifBadgeCount">0</span>
+        </button>
+    </div>
+
+    <script src="js/antrean.js?v=9"></script>
+</body>
+</html>
