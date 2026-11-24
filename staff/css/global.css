@@ -1,33 +1,74 @@
+/* staff/css/global.css */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --blue-dark: #07193d;
+    --blue-primary: #103c8c;
+    --blue-accent: #1d63dc;
+    --blue-soft: #eef4ff;
+    --bg-page: #f5f8fd;
+    --white: #ffffff;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --border-subtle: rgba(16, 60, 140, 0.09);
+    --shadow-soft: 0 10px 30px -5px rgba(7, 25, 61, 0.06);
+    --shadow-hover: 0 18px 36px -8px rgba(16, 60, 140, 0.14);
+    --success-bg: #dcfce7;
+    --success-text: #15803d;
+    --warning-bg: #fef3c7;
+    --warning-text: #b45309;
+    --danger-bg: #fee2e2;
+    --danger-text: #b91c1c;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-    background-color: #f5f8fd;
-    color: #0f172a;
-    min-height: 100vh;
+    background-color: var(--bg-page);
+    color: var(--text-dark);
+    line-height: 1.65;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
 }
 
+main {
+    flex: 1;
+}
+
+.container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Navbar Glassmorphism Elegan */
 .top-navbar {
-    background: #ffffff;
-    border-bottom: 1px solid rgba(16, 60, 140, 0.08);
+    background-color: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
 .nav-container {
-    max-width: 1200px;
+    max-width: 1180px;
     margin: 0 auto;
     padding: 14px 24px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     gap: 16px;
 }
 
@@ -39,116 +80,244 @@ body {
 }
 
 .logo-img {
-    height: 44px;
+    height: 42px;
     width: auto;
     object-fit: contain;
+    border-radius: 8px;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
 }
 
 .logo-text strong {
-    display: block;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 800;
-    color: #103c8c;
-    line-height: 1.1;
+    color: var(--blue-primary);
+    letter-spacing: -0.2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.staff-role-pill {
+    font-size: 10px;
+    font-weight: 800;
+    background: var(--blue-soft);
+    color: var(--blue-accent);
+    padding: 2px 8px;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .logo-text small {
     font-size: 10px;
-    font-weight: 700;
-    color: #64748b;
+    font-weight: 600;
+    color: var(--text-muted);
     letter-spacing: 0.8px;
 }
 
 .main-nav {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
 .main-nav a {
     text-decoration: none;
-    color: #07193d;
+    color: var(--text-muted);
     font-size: 13px;
     font-weight: 700;
-    padding: 9px 16px;
+    letter-spacing: 0.3px;
+    padding: 8px 14px;
     border-radius: 99px;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
 }
 
 .main-nav a:hover,
 .main-nav a.active {
-    background: #eef4ff;
-    color: #1d63dc;
+    color: var(--blue-primary);
+    background-color: var(--blue-soft);
 }
 
-.container {
-    max-width: 1140px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 32px 24px;
-    flex: 1;
-}
-
-.panel-card {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 32px;
-    box-shadow: 0 10px 30px -5px rgba(7, 25, 61, 0.06);
-    border: 1px solid rgba(16, 60, 140, 0.08);
-}
-
-.eyebrow-pill {
-    display: inline-block;
-    background: #eef4ff;
-    color: #103c8c;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    padding: 4px 12px;
-    border-radius: 99px;
-    margin-bottom: 8px;
-}
-
+/* Tombol & Komponen UI Umum */
 .btn-primary {
-    background: #103c8c;
-    color: #ffffff;
+    background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-accent) 100%);
+    color: var(--white);
     border: none;
     padding: 12px 22px;
     border-radius: 10px;
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 700;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(29, 99, 220, 0.25);
 }
 
 .btn-primary:hover {
-    background: #1d63dc;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(29, 99, 220, 0.35);
 }
 
 .btn-outline {
-    background: #ffffff;
-    color: #07193d;
+    background-color: var(--white);
+    color: var(--blue-primary);
     border: 1.5px solid #cbd5e1;
-    padding: 11px 20px;
+    padding: 10px 18px;
     border-radius: 10px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-outline:hover {
+    border-color: var(--blue-primary);
+    background-color: var(--blue-soft);
+}
+
+.card-box {
+    background: var(--white);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: var(--shadow-soft);
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 4px 11px;
+    border-radius: 99px;
+}
+
+.status-pill.waiting { background: #f1f5f9; color: #475569; }
+.status-pill.called { background: #dbeafe; color: #1d4ed8; }
+.status-pill.working { background: var(--warning-bg); color: var(--warning-text); }
+.status-pill.done { background: var(--success-bg); color: var(--success-text); }
+
+/* Form Inputs Seragam */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #dbe3f0;
+    border-radius: 10px;
+    font-size: 13.5px;
+    color: var(--text-dark);
+    background: var(--white);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--blue-accent);
+    box-shadow: 0 0 0 3px rgba(29, 99, 220, 0.12);
+}
+
+/* Modal Pop-up */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 25, 61, 0.55);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 2000;
+}
+
+.modal-card {
+    background: var(--white);
+    width: 100%;
+    max-width: 640px;
+    max-height: 88vh;
+    overflow-y: auto;
+    border-radius: 20px;
+    padding: 26px;
+    box-shadow: 0 24px 60px rgba(7, 25, 61, 0.25);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--blue-dark);
+}
+
+.modal-close-btn {
+    background: #f1f5f9;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #475569;
     cursor: pointer;
 }
 
+/* Footer Minimalis */
 .site-footer {
-    background: #07193d;
-    color: rgba(255, 255, 255, 0.85);
-    padding: 18px 24px;
+    background-color: var(--blue-dark);
+    color: rgba(255, 255, 255, 0.82);
+    padding: 24px 0;
     font-size: 13px;
-    margin-top: auto;
+    margin-top: 40px;
 }
 
 .footer-inner {
-    max-width: 1140px;
-    margin: 0 auto;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
+}
+
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .main-nav {
+        width: 100%;
+        gap: 6px;
+    }
+    .main-nav a {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
 }

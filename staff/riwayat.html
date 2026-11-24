@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Servis — DrivePro Staff</title>
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+        .riwayat-hero {
+            background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-primary) 100%);
+            color: var(--white);
+            padding: 30px 0;
+            margin-bottom: 24px;
+        }
+        .filter-bar-card {
+            background: var(--white);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 18px 20px;
+            box-shadow: var(--shadow-soft);
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 0.9fr auto;
+            gap: 12px;
+            align-items: end;
+            margin-bottom: 20px;
+        }
+        .filter-bar-card label {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 800;
+            color: var(--blue-dark);
+            margin-bottom: 5px;
+        }
+        .history-row-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 48px;
+        }
+        .history-row-card {
+            background: var(--white);
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 15px 18px;
+            display: grid;
+            grid-template-columns: 1.3fr 1.2fr 1.2fr 0.9fr;
+            gap: 14px;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .history-row-card:hover {
+            border-color: var(--blue-accent);
+            background: #f8fafd;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(16, 60, 140, 0.08);
+        }
+        @media (max-width: 860px) {
+            .filter-bar-card, .history-row-card {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="top-navbar">
+        <div class="nav-container">
+            <a href="antrean.html" class="brand-logo">
+                <img src="assets/logo.jpg" alt="DrivePro Logo" class="logo-img">
+                <div class="logo-text">
+                    <strong>DrivePro <span class="staff-role-pill">Staff</span></strong>
+                    <small id="navBranchLabel">DRIVEPRO BANDUNG</small>
+                </div>
+            </a>
+            <nav class="main-nav">
+                <a href="service.html">Penerimaan Servis</a>
+                <a href="antrean.html">Kontrol Antrean</a>
+                <a href="riwayat.html" class="active">Riwayat Servis</a>
+                <a href="profil.html">Profil Staff</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="riwayat-hero">
+        <div class="container">
+            <h1 style="font-size:23px; font-weight:800; margin-bottom:4px;">Riwayat Pengerjaan &amp; Transaksi Servis</h1>
+            <p style="font-size:13px; opacity:0.86;">Klik baris transaksi untuk melihat detail waktu pengerjaan, mekanik, item servis, dan sparepart terpasang.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <!-- Filter Bar -->
+        <div class="filter-bar-card">
+            <div>
+                <label>Cari No. Transaksi / Booking / Plat</label>
+                <input type="text" id="filterTrxKeyword" placeholder="Contoh: TRX-20261123 atau D 1428 ABC..." oninput="renderFilteredHistory()">
+            </div>
+            <div>
+                <label>Filter Pengerja (Staff / Mekanik)</label>
+                <select id="filterWorkerSelect" onchange="renderFilteredHistory()">
+                    <option value="">Semua Pengerja</option>
+                </select>
+            </div>
+            <div>
+                <label>Tanggal Servis</label>
+                <input type="date" id="filterDateInput" onchange="renderFilteredHistory()">
+            </div>
+            <button type="button" class="btn-outline" onclick="resetHistoryFilters()">Reset Filter</button>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <strong style="font-size:13.5px; color:var(--blue-dark);" id="historyCountLabel">Menampilkan 0 transaksi</strong>
+            <span style="font-size:12px; color:var(--text-muted);">Klik baris untuk rincian lengkap</span>
+        </div>
+
+        <!-- List Baris Riwayat -->
+        <div class="history-row-list" id="staffHistoryRowsContainer"></div>
+    </main>
+
+    <!-- Modal Pop-up Detail Transaksi -->
+    <div class="modal-backdrop" id="historyDetailModal" onclick="if(event.target===this) closeHistoryModal()">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modalHistoryTitle">Detail Transaksi Servis</h3>
+                <button type="button" class="modal-close-btn" onclick="closeHistoryModal()">&times;</button>
+            </div>
+            <div id="modalHistoryBody"></div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <span>&copy; 2026 DrivePro Internal Workshop System</span>
+            <span>Service History &amp; Work Order Log</span>
+        </div>
+    </footer>
+
+    <script src="js/staff-store.js"></script>
+    <script src="js/riwayat.js"></script>
+</body>
+</html>

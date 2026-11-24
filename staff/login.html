@@ -3,47 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Staff - DrivePro</title>
-    <link rel="stylesheet" href="css/staff-global.css">
-    <link rel="stylesheet" href="css/login.css">
+    <title>Staff Login — DrivePro Workshop System</title>
+    <link rel="stylesheet" href="css/global.css">
+    <style>
+        body {
+            background: radial-gradient(circle at top right, #e8f0fe 0%, #f5f8fd 55%, #eef3fb 100%);
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+        .login-shell {
+            width: 100%;
+            max-width: 920px;
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            box-shadow: 0 24px 60px rgba(7, 25, 61, 0.1);
+            display: grid;
+            grid-template-columns: 1fr 1.05fr;
+            overflow: hidden;
+        }
+        .login-brand-side {
+            background: linear-gradient(155deg, var(--blue-dark) 0%, var(--blue-primary) 60%, var(--blue-accent) 100%);
+            color: #ffffff;
+            padding: 40px 34px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .login-form-side {
+            padding: 40px 36px;
+        }
+        .demo-account-chip {
+            background: #f8fafd;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            width: 100%;
+        }
+        .demo-account-chip:hover {
+            border-color: var(--blue-accent);
+            background: var(--blue-soft);
+        }
+        @media (max-width: 768px) {
+            .login-shell { grid-template-columns: 1fr; }
+            .login-brand-side { padding: 28px 24px; }
+            .login-form-side { padding: 28px 24px; }
+        }
+    </style>
 </head>
-<body class="login-body">
+<body>
 
-    <main class="login-card">
-        <div class="brand-row">
-            <img src="assets/logo.jpg" alt="Logo DrivePro">
+    <div class="login-shell">
+        <div class="login-brand-side">
             <div>
-                <strong>DrivePro</strong>
-                <small>YOUR CAR, OUR PRIORITY.</small>
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:28px;">
+                    <img src="assets/logo2.jpg" alt="DrivePro" style="width:44px; height:44px; border-radius:10px; object-fit:cover;">
+                    <div>
+                        <strong style="display:block; font-size:17px;">DrivePro Staff</strong>
+                        <small style="opacity:0.8; font-size:11px; letter-spacing:0.6px;">INTERNAL WORKSHOP PORTAL</small>
+                    </div>
+                </div>
+                <h1 style="font-size:26px; font-weight:800; line-height:1.3; margin-bottom:12px;">Kendali Operasional Servis &amp; Antrean Bay</h1>
+                <p style="font-size:13.5px; opacity:0.85; line-height:1.6;">
+                    Kelola pendaftaran walk-in customer, sesuaikan estimasi waktu bay secara real-time, perbarui jenis perbaikan, dan catat pemakaian sparepart.
+                </p>
+            </div>
+            <div style="padding-top:24px; border-top:1px solid rgba(255,255,255,0.16); font-size:12px; opacity:0.8;">
+                <a href="../index.html" style="color:#ffffff; text-decoration:none; font-weight:700;">&larr; Kembali ke Portal Utama</a>
             </div>
         </div>
 
-        <span class="eyebrow-pill">STAFF & KASIR PORTAL</span>
-        <h1>Masuk ke Sistem Bengkel</h1>
-        <p>Login menggunakan ID Staff atau Email terdaftar untuk mengakses layanan, antrean, kasir, dan riwayat transaksi.</p>
+        <div class="login-form-side">
+            <h2 style="font-size:22px; font-weight:800; color:var(--blue-dark); margin-bottom:6px;">Masuk ke Akun Staff</h2>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:22px;">Gunakan ID Karyawan atau Email resmi DrivePro Anda.</p>
 
-        <form id="staffLoginForm" class="login-form">
-            <div class="form-group">
-                <label for="staffIdentifier">ID Staff atau Email</label>
-                <input type="text" id="staffIdentifier" placeholder="Contoh: STF-BDG-01 atau rizky@drivepro.co.id" required>
-            </div>
-            <div class="form-group">
-                <label for="staffPassword">Password</label>
-                <input type="password" id="staffPassword" placeholder="Masukkan password" required>
-            </div>
-            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 6px;">Login & Buka Workspace</button>
-        </form>
+            <form id="staffLoginForm" style="display:flex; flex-direction:column; gap:14px;">
+                <div>
+                    <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:6px;">Email / ID Staff</label>
+                    <input type="text" id="staffLoginEmail" value="raka.staff@drivepro.id" required>
+                </div>
+                <div>
+                    <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:6px;">Password</label>
+                    <input type="password" id="staffLoginPass" value="drivepro123" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%; margin-top:4px;">Masuk ke Dashboard Staff</button>
+            </form>
 
-        <div class="demo-box">
-            <strong>Akun Demo Staff:</strong><br>
-            • Bandung: <code>STF-BDG-01</code> / <code>rizky@drivepro.co.id</code> (Pass: <code>staff123</code>)<br>
-            • Jakarta: <code>STF-JKT-01</code> / <code>dimas@drivepro.co.id</code> (Pass: <code>staff123</code>)<br>
-            • Surabaya: <code>STF-SBY-01</code> / <code>nadia@drivepro.co.id</code> (Pass: <code>staff123</code>)
+            <div style="margin-top:24px; padding-top:18px; border-top:1px solid #e2e8f0;">
+                <span style="display:block; font-size:11.5px; font-weight:700; color:var(--text-muted); margin-bottom:10px;">
+                    Pilih Cepat Akun Demo Cabang:
+                </span>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <button type="button" class="demo-account-chip" onclick="loginAsDemoStaff(0)">
+                        <strong style="display:block; font-size:13px; color:var(--blue-primary);">Raka Pratama • DrivePro Bandung</strong>
+                        <small style="color:var(--text-muted);">Senior Service Advisor • Fokus Bay 1 &amp; 2</small>
+                    </button>
+                    <button type="button" class="demo-account-chip" onclick="loginAsDemoStaff(1)">
+                        <strong style="display:block; font-size:13px; color:var(--blue-primary);">Dimas Saputra • DrivePro Jakarta</strong>
+                        <small style="color:var(--text-muted);">Service Advisor &amp; Lead Mechanic • Fokus Bay 1 &amp; 2</small>
+                    </button>
+                </div>
+            </div>
         </div>
-    </main>
+    </div>
 
-    <script src="js/data.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/login.js"></script>
+    <script src="js/staff-store.js"></script>
+    <script>
+        function loginAsDemoStaff(idx) {
+            const acc = STAFF_ACCOUNTS[idx] || STAFF_ACCOUNTS[0];
+            localStorage.setItem('drivepro_logged_staff', JSON.stringify(acc));
+            ensureInitialWorkshopQueues();
+            getCompletedHistoryList();
+            window.location.href = 'antrean.html';
+        }
+
+        document.getElementById('staffLoginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const q = document.getElementById('staffLoginEmail').value.trim().toLowerCase();
+            const found = STAFF_ACCOUNTS.find(a => a.email.toLowerCase() === q || a.staffId.toLowerCase() === q) || STAFF_ACCOUNTS[0];
+            localStorage.setItem('drivepro_logged_staff', JSON.stringify(found));
+            ensureInitialWorkshopQueues();
+            getCompletedHistoryList();
+            window.location.href = 'antrean.html';
+        });
+    </script>
 </body>
 </html>

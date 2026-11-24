@@ -1,0 +1,168 @@
+/* staff/css/antrean.css */
+.queue-top-bar {
+    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-primary) 100%);
+    color: var(--white);
+    padding: 28px 0;
+    margin-bottom: 24px;
+}
+
+.queue-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.mode-switcher-pills {
+    display: inline-flex;
+    background: rgba(255, 255, 255, 0.14);
+    padding: 5px;
+    border-radius: 12px;
+    gap: 6px;
+}
+
+.mode-pill-btn {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.85);
+    border: none;
+    padding: 9px 16px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mode-pill-btn.active {
+    background: var(--white);
+    color: var(--blue-primary);
+    box-shadow: 0 4px 12px rgba(7, 25, 61, 0.2);
+}
+
+.bay-overview-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.bay-mini-card {
+    background: var(--white);
+    border: 1.5px solid #dbe3f0;
+    border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.bay-mini-card:hover {
+    border-color: var(--blue-accent);
+    transform: translateY(-2px);
+}
+
+.bay-mini-card.selected-bay {
+    border-color: var(--blue-accent);
+    background: var(--blue-soft);
+    box-shadow: 0 8px 20px rgba(29, 99, 220, 0.12);
+}
+
+.bay-mini-card.my-assigned::after {
+    content: 'BAY SAYA';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 9.5px;
+    font-weight: 800;
+    background: var(--blue-primary);
+    color: var(--white);
+    padding: 2px 7px;
+    border-radius: 6px;
+}
+
+.workspace-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 22px;
+    align-items: start;
+    margin-bottom: 48px;
+}
+
+.time-adjust-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: #f8fafd;
+    border: 1px solid #dbe3f0;
+    padding: 12px 14px;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.btn-time-step {
+    background: var(--white);
+    border: 1.5px solid #cbd5e1;
+    color: var(--blue-primary);
+    font-size: 12px;
+    font-weight: 800;
+    padding: 6px 11px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.btn-time-step:hover {
+    background: var(--blue-primary);
+    color: var(--white);
+    border-color: var(--blue-primary);
+}
+
+.btn-time-step.delay {
+    color: #b45309;
+    border-color: #fcd34d;
+    background: #fffbeb;
+}
+
+.btn-time-step.delay:hover {
+    background: #d97706;
+    color: var(--white);
+    border-color: #d97706;
+}
+
+.item-line-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #f8fafd;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.qty-stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--white);
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 2px 6px;
+}
+
+.qty-stepper button {
+    background: none;
+    border: none;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--blue-primary);
+    cursor: pointer;
+    padding: 2px 6px;
+}
+
+@media (max-width: 920px) {
+    .workspace-grid { grid-template-columns: 1fr; }
+}

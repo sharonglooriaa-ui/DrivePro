@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Service Walk-In - DrivePro Staff</title>
-    <link rel="stylesheet" href="css/staff-global.css">
+    <title>Penerimaan Servis (Walk-In) — DrivePro Staff</title>
+    <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/service.css">
 </head>
 <body>
@@ -12,98 +12,226 @@
     <header class="top-navbar">
         <div class="nav-container">
             <a href="antrean.html" class="brand-logo">
-                <img src="assets/logo.jpg" alt="Logo DrivePro" class="logo-img">
+                <img src="assets/logo.jpg" alt="DrivePro Logo" class="logo-img">
                 <div class="logo-text">
-                    <strong>DrivePro</strong>
-                    <small>YOUR CAR, OUR PRIORITY.</small>
+                    <strong>DrivePro <span class="staff-role-pill">Staff</span></strong>
+                    <small id="navBranchLabel">DRIVEPRO BANDUNG</small>
                 </div>
             </a>
-
             <nav class="main-nav">
-                <a href="service.html" class="active">SERVICE</a>
-                <a href="antrean.html">ANTREAN</a>
-                <a href="riwayat.html">RIWAYAT TRANSAKSI</a>
-                <a href="profil.html">PROFIL STAFF</a>
+                <a href="service.html" class="active">Penerimaan Servis</a>
+                <a href="antrean.html">Kontrol Antrean</a>
+                <a href="riwayat.html">Riwayat Servis</a>
+                <a href="profil.html">Profil Staff</a>
             </nav>
         </div>
     </header>
 
+    <section class="staff-page-hero">
+        <div class="container">
+            <h1>Penerimaan Servis &amp; Ambil Nomor Antrean</h1>
+            <p>Bantu pelanggan walk-in atau member terdaftar untuk membuat tiket antrean bengkel dan alokasi bay mekanik.</p>
+        </div>
+    </section>
+
     <main class="container">
-        <section class="panel-card">
-            <span class="eyebrow-pill">WALK-IN SERVICE</span>
-            <h2>Form Booking Antrean Customer (Tanpa HP)</h2>
-            <p class="subtitle">Isikan data kendaraan dan keluhan awal customer. Nomor antrean otomatis terhubung ke daftar antrean customer.</p>
+        <form id="staffServiceForm" class="service-split-layout">
+            <!-- KOLOM KIRI: DATA PELANGGAN, KENDARAAN & LAYANAN -->
+            <div>
+                <!-- Step 1: Status Pelanggan -->
+                <div class="form-step-card">
+                    <div class="step-heading">
+                        <span class="step-badge">1</span>
+                        <span>Status Pelanggan</span>
+                    </div>
 
-            <form id="walkInBookingForm" class="walkin-grid">
-                <div class="form-group">
-                    <label>Cabang Bengkel *</label>
-                    <select id="wiBranch" required>
-                        <option value="DrivePro Bandung - Soekarno Hatta">DrivePro Bandung - Soekarno Hatta</option>
-                        <option value="DrivePro Jakarta - TB Simatupang">DrivePro Jakarta - TB Simatupang</option>
-                        <option value="DrivePro Surabaya - Ahmad Yani">DrivePro Surabaya - Ahmad Yani</option>
-                    </select>
+                    <div class="radio-toggle-grid">
+                        <label class="radio-pill-card active" id="pillNonMember">
+                            <input type="radio" name="customerType" value="non-member" checked onchange="toggleStaffCustomerType('non-member')">
+                            <span>Non-Member (Pelanggan Umum)</span>
+                        </label>
+                        <label class="radio-pill-card" id="pillMember">
+                            <input type="radio" name="customerType" value="member" onchange="toggleStaffCustomerType('member')">
+                            <span>Member (Gunakan Data Tersimpan)</span>
+                        </label>
+                    </div>
+
+                    <!-- Form Non-Member -->
+                    <div id="guestFieldsBox" class="form-grid-2">
+                        <div class="field-group">
+                            <label>Nama Lengkap Pelanggan *</label>
+                            <input type="text" id="guestName" placeholder="Contoh: Andi Pratama">
+                        </div>
+                        <div class="field-group">
+                            <label>No. WhatsApp / HP *</label>
+                            <input type="tel" id="guestPhone" placeholder="Contoh: 081234567890">
+                        </div>
+                        <div class="field-group">
+                            <label>Email (Opsional)</label>
+                            <input type="email" id="guestEmail" placeholder="pelanggan@email.com">
+                        </div>
+                        <div class="field-group">
+                            <label>Domisili Kota</label>
+                            <input type="text" id="guestCity" value="Bandung">
+                        </div>
+                    </div>
+
+                    <!-- Lookup Member -->
+                    <div id="memberLookupBox" class="member-lookup-panel" style="display:none;">
+                        <label style="font-size:12.5px; font-weight:700;">Masukkan No. HP atau Email Member</label>
+                        <div class="lookup-input-row">
+                            <input type="text" id="memberSearchInput" placeholder="Contoh: 081234567890 atau budi@email.com">
+                            <button type="button" class="btn-primary" onclick="searchMemberForStaff()">Cari Member</button>
+                        </div>
+                        <small style="display:block; color:var(--text-muted); margin-top:6px;">
+                            Demo akun tersedia: <strong>081234567890</strong> atau <strong>budi@email.com</strong>
+                        </small>
+
+                        <div id="memberResultArea" style="display:none;">
+                            <div class="member-banner" id="memberBannerText"></div>
+                            <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:8px;">Pilih Kendaraan Member atau Tambah Baru:</label>
+                            <div class="saved-vehicles-grid" id="memberVehiclesContainer"></div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Jenis Mesin Mobil *</label>
-                    <select id="wiEngineType" onchange="renderWalkInChecklist()" required>
-                        <option value="Bensin">Bensin (ICE)</option>
-                        <option value="Hybrid">Hybrid (HEV/PHEV)</option>
-                        <option value="Listrik">Listrik (EV)</option>
-                    </select>
+                <!-- Step 2: Informasi Kendaraan -->
+                <div class="form-step-card">
+                    <div class="step-heading">
+                        <span class="step-badge">2</span>
+                        <span>Informasi Kendaraan</span>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div class="field-group">
+                            <label>Tipe Mesin *</label>
+                            <select id="engineType" onchange="onStaffEngineChange(this.value)">
+                                <option value="Bensin">Mesin Bensin</option>
+                                <option value="Hybrid">Mesin Hybrid</option>
+                                <option value="Listrik">Mobil Listrik (EV)</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label>Merk Kendaraan *</label>
+                            <select id="vehicleBrand" onchange="onStaffBrandChange(this.value)" required></select>
+                        </div>
+                        <div class="field-group">
+                            <label>Model Kendaraan *</label>
+                            <select id="vehicleModel" required></select>
+                        </div>
+                        <div class="field-group">
+                            <label>Nomor Polisi (Plat) *</label>
+                            <input type="text" id="plateNumber" placeholder="Contoh: D 1428 ABC" style="text-transform:uppercase;" required>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Nama Lengkap Customer *</label>
-                    <input type="text" id="wiCustomerName" placeholder="Nama customer" required>
+                <!-- Step 3: Keluhan & Jenis Layanan Awal -->
+                <div class="form-step-card">
+                    <div class="step-heading">
+                        <span class="step-badge">3</span>
+                        <span>Pilih Jenis Layanan Awal</span>
+                    </div>
+                    <div class="service-checklist-grid" id="staffServiceChecklist"></div>
+                </div>
+            </div>
+
+            <!-- KOLOM KANAN: PENEMPATAN CABANG, BAY, MEKANIK & RINGKASAN -->
+            <div class="sticky-summary-card">
+                <h3 style="font-size:16px; font-weight:800; color:var(--blue-dark); margin-bottom:14px;">Alokasi Bengkel &amp; Tiket</h3>
+
+                <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:18px;">
+                    <div class="field-group">
+                        <label>Cabang Bengkel</label>
+                        <select id="workshopBranchSelect" onchange="onBranchChanged(this.value)">
+                            <option value="bandung">DrivePro Bandung</option>
+                            <option value="jakarta">DrivePro Jakarta</option>
+                            <option value="surabaya">DrivePro Surabaya</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label>Alokasi Bay Pengerjaan</label>
+                        <select id="targetBaySelect">
+                            <option value="1">Bay 1 (Prioritas SA)</option>
+                            <option value="2">Bay 2 (Prioritas SA)</option>
+                            <option value="3">Bay 3</option>
+                            <option value="4">Bay 4</option>
+                            <option value="5">Bay 5</option>
+                            <option value="6">Bay 6</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label>Mekanik Pengerja *</label>
+                        <select id="assignedMechanicSelect" required></select>
+                    </div>
+                    <div class="form-grid-2">
+                        <div class="field-group">
+                            <label>Tanggal</label>
+                            <input type="date" id="bookingDate" required>
+                        </div>
+                        <div class="field-group">
+                            <label>Jam Masuk</label>
+                            <input type="text" id="bookingTime" required>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>No. WhatsApp / HP (Opsional jika tidak bawa HP)</label>
-                    <input type="text" id="wiPhone" placeholder="Contoh: 081234567890 atau -">
+                <div style="background:#f8fafd; border:1px solid #e2e8f0; border-radius:12px; padding:14px; margin-bottom:16px;">
+                    <div class="summary-row">
+                        <span style="color:var(--text-muted);">Service Advisor</span>
+                        <strong id="summarySaName">-</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span style="color:var(--text-muted);">Jumlah Layanan</span>
+                        <strong id="summarySrvCount">0 Layanan</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span style="color:var(--text-muted);">Estimasi Durasi</span>
+                        <strong id="summaryEstDuration">0 Menit</strong>
+                    </div>
+                    <div class="summary-row" style="border-bottom:none; padding-top:10px; font-size:15px; color:var(--blue-primary);">
+                        <strong>Estimasi Biaya Awal</strong>
+                        <strong id="summaryTotalPrice">Rp 0</strong>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Merk & Tipe Mobil *</label>
-                    <input type="text" id="wiCarModel" placeholder="Contoh: Toyota Avanza / Hyundai Ioniq 5" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Nomor Polisi (Plat) *</label>
-                    <input type="text" id="wiPlate" placeholder="Contoh: D 1234 ABC" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Tanggal Servis *</label>
-                    <input type="date" id="wiDate" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Jam Mulai Antrean *</label>
-                    <input type="time" id="wiTime" value="09:00" required>
-                </div>
-
-                <div class="form-group full-col">
-                    <label>Pilih Keluhan / Tindakan Servis Awal *</label>
-                    <div id="wiChecklistContainer" class="check-grid"></div>
-                </div>
-
-                <div class="full-col" style="text-align: right; margin-top: 8px;">
-                    <button type="submit" class="btn-primary">Simpan & Masukkan ke Daftar Antrean</button>
-                </div>
-            </form>
-        </section>
+                <button type="submit" class="btn-primary" style="width:100%;">
+                    Terbitkan Tiket Antrean &rarr;
+                </button>
+            </div>
+        </form>
     </main>
 
+    <!-- Modal Tiket Berhasil Dibuat -->
+    <div class="modal-backdrop" id="staffTicketModal">
+        <div class="modal-card" style="max-width:460px; text-align:center;">
+            <div style="width:54px; height:54px; border-radius:50%; background:var(--success-bg); color:var(--success-text); display:inline-flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; margin-bottom:12px;">&#10003;</div>
+            <h3 style="font-size:19px; font-weight:800; color:var(--blue-dark); margin-bottom:4px;">Antrean Berhasil Diterbitkan!</h3>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Data langsung tersinkron ke layar antrean Staff &amp; Customer.</p>
+
+            <div style="background:var(--blue-soft); border:1.5px solid #bfdbfe; border-radius:14px; padding:16px; margin-bottom:16px;">
+                <small style="font-size:11px; font-weight:800; color:var(--blue-accent); letter-spacing:0.6px;">NOMOR ANTREAN</small>
+                <div id="issuedTicketCode" style="font-size:32px; font-weight:800; color:var(--blue-dark); line-height:1.2;">A-016</div>
+                <div id="issuedBookingCode" style="font-size:12px; font-weight:700; color:var(--blue-primary); margin-top:4px;">BK-20261124-016</div>
+            </div>
+
+            <div id="issuedTicketSummary" style="text-align:left; background:#f8fafd; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; font-size:13px; margin-bottom:18px; display:flex; flex-direction:column; gap:5px;"></div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <button type="button" class="btn-outline" onclick="document.getElementById('staffTicketModal').style.display='none'">Input Lagi</button>
+                <a href="antrean.html" class="btn-primary">Buka Kontrol Antrean</a>
+            </div>
+        </div>
+    </div>
+
     <footer class="site-footer">
-        <div class="footer-inner">
-            <p>&copy; 2026 DrivePro — Your Car, Our Priority.</p>
-            <p>Staff & Workshop Operations Portal</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 DrivePro Internal Workshop System</span>
+            <span>Service Advisor &amp; Bay Management Portal</span>
         </div>
     </footer>
 
-    <script src="js/data.js"></script>
-    <script src="js/auth.js"></script>
+    <script src="js/staff-store.js"></script>
     <script src="js/service.js"></script>
 </body>
 </html>

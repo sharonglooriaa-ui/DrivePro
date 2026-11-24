@@ -1,0 +1,64 @@
+/* staff/css/profil.css */
+.profil-hero {
+    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-primary) 100%);
+    color: var(--white);
+    padding: 32px 0;
+    margin-bottom: 26px;
+}
+
+.profil-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 48px;
+}
+
+.avatar-circle {
+    width: 68px;
+    height: 68px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--blue-primary), var(--blue-accent));
+    color: var(--white);
+    font-size: 24px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+
+.kpi-grid-2x2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.kpi-stat-box {
+    background: #f8fafd;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px 18px;
+}
+
+.kpi-stat-box small {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.kpi-stat-box strong {
+    display: block;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--blue-primary);
+}
+
+@media (max-width: 820px) {
+    .profil-layout, .kpi-grid-2x2 {
+        grid-template-columns: 1fr;
+    }
+}
