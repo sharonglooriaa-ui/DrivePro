@@ -21,6 +21,42 @@
     --danger-text: #b91c1c;
 }
 
+/* DISINI KALI YAK TIMPANYA */
+/* Seragamkan banner biru bagian atas di semua halaman Staff */
+.staff-page-hero,
+.queue-top-bar {
+    width: 100%;
+    min-height: 114px;
+    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-primary) 100%);
+    color: var(--white);
+    padding: 28px 0;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.staff-page-hero > .container,
+.queue-top-bar > .container {
+    width: 100%;
+}
+
+.staff-page-hero h1,
+.queue-top-bar h1 {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    line-height: 1.25;
+}
+
+.staff-page-hero p,
+.queue-top-bar p {
+    font-size: 13px;
+    opacity: 0.88;
+    margin: 0;
+}
+/* sampee sini aja */
+
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -47,6 +83,7 @@ main {
 }
 
 .container {
+    width: 100%;
     max-width: 1180px;
     margin: 0 auto;
     padding: 0 24px;
@@ -249,7 +286,7 @@ textarea:focus {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    z-index: 2000;
+    z-index: 1000;
 }
 
 .modal-card {

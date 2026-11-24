@@ -30,7 +30,7 @@
     <section class="staff-page-hero">
         <div class="container">
             <h1>Penerimaan Servis &amp; Ambil Nomor Antrean</h1>
-            <p>Bantu pelanggan walk-in atau member terdaftar untuk membuat tiket antrean bengkel dan alokasi bay mekanik.</p>
+            <p>Bantu pelanggan walk-in atau member terdaftar untuk membuat tiket antrean bengkel.</p>
         </div>
     </section>
 
@@ -67,7 +67,7 @@
                             <input type="tel" id="guestPhone" placeholder="Contoh: 081234567890">
                         </div>
                         <div class="field-group">
-                            <label>Email (Opsional)</label>
+                            <label>Email Pelanggan</label>
                             <input type="email" id="guestEmail" placeholder="pelanggan@email.com">
                         </div>
                         <div class="field-group">
@@ -123,6 +123,10 @@
                             <label>Nomor Polisi (Plat) *</label>
                             <input type="text" id="plateNumber" placeholder="Contoh: D 1428 ABC" style="text-transform:uppercase;" required>
                         </div>
+                        <div class="field-group" style="grid-column: 1 / -1;">
+                            <label>Tahun Pembuatan &amp; Odometer (KM) *</label>
+                            <input type="text" id="vehicleYearKm" placeholder="Contoh: 2022 • 42.500 km" required>
+                        </div>
                     </div>
                 </div>
 
@@ -136,33 +140,18 @@
                 </div>
             </div>
 
-            <!-- KOLOM KANAN: PENEMPATAN CABANG, BAY, MEKANIK & RINGKASAN -->
+            <!-- KOLOM KANAN: CABANG, WAKTU MASUK & RINGKASAN TIKET -->
             <div class="sticky-summary-card">
-                <h3 style="font-size:16px; font-weight:800; color:var(--blue-dark); margin-bottom:14px;">Alokasi Bengkel &amp; Tiket</h3>
+                <h3 style="font-size:16px; font-weight:800; color:var(--blue-dark); margin-bottom:14px;">Jadwal &amp; Ringkasan Tiket</h3>
 
                 <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:18px;">
                     <div class="field-group">
                         <label>Cabang Bengkel</label>
-                        <select id="workshopBranchSelect" onchange="onBranchChanged(this.value)">
+                        <select id="workshopBranchSelect">
                             <option value="bandung">DrivePro Bandung</option>
                             <option value="jakarta">DrivePro Jakarta</option>
                             <option value="surabaya">DrivePro Surabaya</option>
                         </select>
-                    </div>
-                    <div class="field-group">
-                        <label>Alokasi Bay Pengerjaan</label>
-                        <select id="targetBaySelect">
-                            <option value="1">Bay 1 (Prioritas SA)</option>
-                            <option value="2">Bay 2 (Prioritas SA)</option>
-                            <option value="3">Bay 3</option>
-                            <option value="4">Bay 4</option>
-                            <option value="5">Bay 5</option>
-                            <option value="6">Bay 6</option>
-                        </select>
-                    </div>
-                    <div class="field-group">
-                        <label>Mekanik Pengerja *</label>
-                        <select id="assignedMechanicSelect" required></select>
                     </div>
                     <div class="form-grid-2">
                         <div class="field-group">
@@ -182,6 +171,10 @@
                         <strong id="summarySaName">-</strong>
                     </div>
                     <div class="summary-row">
+                        <span style="color:var(--text-muted);">Status Awal</span>
+                        <strong style="color:var(--blue-accent);">Antrean Menunggu</strong>
+                    </div>
+                    <div class="summary-row">
                         <span style="color:var(--text-muted);">Jumlah Layanan</span>
                         <strong id="summarySrvCount">0 Layanan</strong>
                     </div>
@@ -195,27 +188,40 @@
                     </div>
                 </div>
 
+                <small style="display:block; color:var(--text-muted); margin-bottom:14px; line-height:1.45;">
+                    *Penempatan Bay dan penugasan Mekanik dilakukan di menu <strong>Kontrol Antrean</strong> saat bay tersedia.
+                </small>
+
                 <button type="submit" class="btn-primary" style="width:100%;">
-                    Terbitkan Tiket Antrean &rarr;
+                    Terbitkan Tiket Antrean
                 </button>
             </div>
         </form>
     </main>
 
-    <!-- Modal Tiket Berhasil Dibuat -->
+    <!-- Modal Tiket Berhasil Dibuat + Kirim WA / Email -->
     <div class="modal-backdrop" id="staffTicketModal">
-        <div class="modal-card" style="max-width:460px; text-align:center;">
+        <div class="modal-card" style="max-width:480px; text-align:center;">
             <div style="width:54px; height:54px; border-radius:50%; background:var(--success-bg); color:var(--success-text); display:inline-flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; margin-bottom:12px;">&#10003;</div>
             <h3 style="font-size:19px; font-weight:800; color:var(--blue-dark); margin-bottom:4px;">Antrean Berhasil Diterbitkan!</h3>
-            <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Data langsung tersinkron ke layar antrean Staff &amp; Customer.</p>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Kirim nomor antrean dan detail reservasi ke WhatsApp atau Email pelanggan.</p>
 
-            <div style="background:var(--blue-soft); border:1.5px solid #bfdbfe; border-radius:14px; padding:16px; margin-bottom:16px;">
+            <div style="background:var(--blue-soft); border:1.5px solid #bfdbfe; border-radius:14px; padding:16px; margin-bottom:14px;">
                 <small style="font-size:11px; font-weight:800; color:var(--blue-accent); letter-spacing:0.6px;">NOMOR ANTREAN</small>
                 <div id="issuedTicketCode" style="font-size:32px; font-weight:800; color:var(--blue-dark); line-height:1.2;">A-016</div>
                 <div id="issuedBookingCode" style="font-size:12px; font-weight:700; color:var(--blue-primary); margin-top:4px;">BK-20261124-016</div>
             </div>
 
-            <div id="issuedTicketSummary" style="text-align:left; background:#f8fafd; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; font-size:13px; margin-bottom:18px; display:flex; flex-direction:column; gap:5px;"></div>
+            <div id="issuedTicketSummary" style="text-align:left; background:#f8fafd; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; font-size:13px; margin-bottom:14px; display:flex; flex-direction:column; gap:5px;"></div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+                <a id="btnSendTicketWa" href="#" target="_blank" class="btn-primary" style="background:#16a34a; box-shadow:none; font-size:12.5px;">
+                    Kirim ke WhatsApp
+                </a>
+                <a id="btnSendTicketEmail" href="#" class="btn-outline" style="font-size:12.5px;">
+                    Kirim ke Email
+                </a>
+            </div>
 
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
                 <button type="button" class="btn-outline" onclick="document.getElementById('staffTicketModal').style.display='none'">Input Lagi</button>

@@ -13,19 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('bookingTime').value = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} WIB`;
 
     const branchSelect = document.getElementById('workshopBranchSelect');
-    branchSelect.value = activeStaff.branchKey;
-    onBranchChanged(activeStaff.branchKey);
+    if (branchSelect) branchSelect.value = activeStaff.branchKey;
 
     onStaffEngineChange('Bensin');
 
     document.getElementById('staffServiceForm').addEventListener('submit', handleStaffServiceSubmit);
 });
-
-function onBranchChanged(branchKey) {
-    const mechSelect = document.getElementById('assignedMechanicSelect');
-    const mechs = MECHANICS_BY_BRANCH[branchKey] || MECHANICS_BY_BRANCH.bandung;
-    mechSelect.innerHTML = mechs.map(m => `<option value="${m}">${m}</option>`).join('');
-}
 
 function toggleStaffCustomerType(type) {
     document.getElementById('pillNonMember').classList.toggle('active', type === 'non-member');
@@ -65,14 +58,13 @@ function searchMemberForStaff() {
 
     const vehicles = found.vehicles || [];
     const vehHtml = vehicles.map((v, idx) => {
-        const isEv = (v.engineType || '').toLowerCase().includes('listrik') || (v.model || '').toLowerCase().includes('ioniq');
-        const imgSrc = isEv ? 'assets/ioniq.png' : 'assets/avanza.png';
+        const imgSrc = getStaffCarImage(`${v.brand} ${v.model} ${v.engineType}`);
         return `
             <div class="saved-veh-card" id="staff-veh-card-${idx}" onclick="pickMemberVehicle(${idx})">
-                <img src="${imgSrc}" alt="${v.model}">
+                <img src="${imgSrc}" onerror="this.onerror=null;this.src=FALLBACK_CAR_SVG;" alt="${v.model}">
                 <div>
                     <strong style="display:block; font-size:13px; color:var(--blue-dark);">${v.brand} ${v.model}</strong>
-                    <small style="color:var(--text-muted);">${v.plateNumber} • ${v.engineType}</small>
+                    <small style="color:var(--text-muted);">${v.plateNumber} • ${v.yearKm || v.engineType}</small>
                 </div>
             </div>
         `;
@@ -96,6 +88,7 @@ function pickMemberVehicle(idx) {
 
     if (idx === 'NEW' || !matchedMemberData) {
         document.getElementById('plateNumber').value = '';
+        document.getElementById('vehicleYearKm').value = '';
         return;
     }
 
@@ -108,6 +101,7 @@ function pickMemberVehicle(idx) {
     onStaffBrandChange(v.brand);
     document.getElementById('vehicleModel').value = v.model;
     document.getElementById('plateNumber').value = v.plateNumber;
+    document.getElementById('vehicleYearKm').value = v.yearKm || '2023 • 25.000 km';
 }
 
 function onStaffEngineChange(engineType) {
@@ -121,17 +115,30 @@ function onStaffEngineChange(engineType) {
     });
 
     const list = STAFF_SERVICE_CATALOG[engineType] || [];
-    document.getElementById('staffServiceChecklist').innerHTML = list.map(srv => `
-        <label class="srv-check-card">
-            <input type="checkbox" value="${srv.id}" data-name="${srv.name}" data-price="${srv.price}" data-duration="${srv.duration}" onchange="recalcStaffServiceSummary()">
-            <div>
-                <strong style="display:block; font-size:13px; color:var(--blue-dark);">${srv.name}</strong>
-                <small style="color:var(--text-muted);">± ${srv.duration} mnt • ${formatRupiah(srv.price)}</small>
-            </div>
-        </label>
-    `).join('');
+    document.getElementById('staffServiceChecklist').innerHTML = list.map(srv => {
+        const isOther = srv.id === 'srv-lainnya';
+        return `
+            <label class="srv-check-card">
+                <input type="checkbox" value="${srv.id}" data-name="${srv.name}" data-price="${srv.price}" data-duration="${srv.duration}"
+                       onchange="recalcStaffServiceSummary(); ${isOther ? 'toggleStaffOtherInput(this)' : ''}">
+                <div>
+                    <strong style="display:block; font-size:13px; color:var(--blue-dark);">${srv.name}</strong>
+                    <small style="color:var(--text-muted);">± ${srv.duration} mnt • ${formatRupiah(srv.price)}</small>
+                </div>
+            </label>
+        `;
+    }).join('') + `
+        <div id="staffOtherServiceNoteBox" style="display:none; grid-column: 1 / -1; margin-top:4px;">
+            <input type="text" id="staffOtherServiceNote" placeholder="Tuliskan detail keluhan / perbaikan lainnya (misal: bunyi kaki-kaki depan, ganti kaca spion, dll)...">
+        </div>
+    `;
 
     recalcStaffServiceSummary();
+}
+
+function toggleStaffOtherInput(cb) {
+    const box = document.getElementById('staffOtherServiceNoteBox');
+    if (box) box.style.display = cb.checked ? 'block' : 'none';
 }
 
 function onStaffBrandChange(brand) {
@@ -160,6 +167,7 @@ function handleStaffServiceSubmit(e) {
     const custType = document.querySelector('input[name="customerType"]:checked').value;
     let custName = '';
     let custPhone = '';
+    let custEmail = '';
 
     if (custType === 'member') {
         if (!matchedMemberData) {
@@ -168,9 +176,11 @@ function handleStaffServiceSubmit(e) {
         }
         custName = matchedMemberData.name;
         custPhone = matchedMemberData.phone;
+        custEmail = matchedMemberData.email || '';
     } else {
         custName = document.getElementById('guestName').value.trim();
         custPhone = document.getElementById('guestPhone').value.trim();
+        custEmail = document.getElementById('guestEmail').value.trim();
         if (!custName || !custPhone) {
             alert('Harap lengkapi Nama Pelanggan dan No. HP.');
             return;
@@ -199,15 +209,19 @@ function handleStaffServiceSubmit(e) {
     const brand = document.getElementById('vehicleBrand').value;
     const model = document.getElementById('vehicleModel').value;
     const plate = document.getElementById('plateNumber').value.trim().toUpperCase();
-    const bayNum = Number(document.getElementById('targetBaySelect').value);
-    const mechanic = document.getElementById('assignedMechanicSelect').value;
+    const yearKm = document.getElementById('vehicleYearKm').value.trim();
+    const otherNote = document.getElementById('staffOtherServiceNote')?.value.trim() || '';
 
-    const servicesList = checked.map(cb => ({
-        id: cb.value,
-        name: cb.dataset.name,
-        price: Number(cb.dataset.price),
-        duration: Number(cb.dataset.duration)
-    }));
+    const servicesList = checked.map(cb => {
+        const isOther = cb.value === 'srv-lainnya';
+        const displayName = (isOther && otherNote) ? `Lainnya: ${otherNote}` : cb.dataset.name;
+        return {
+            id: cb.value,
+            name: displayName,
+            price: Number(cb.dataset.price),
+            duration: Number(cb.dataset.duration)
+        };
+    });
 
     const totalDuration = servicesList.reduce((acc, s) => acc + s.duration, 0);
 
@@ -216,23 +230,27 @@ function handleStaffServiceSubmit(e) {
         ticket: ticketCode,
         branch: branchKey,
         branchName: branchLabelMap[branchKey],
-        bay: bayNum,
+        bay: 0,
         name: custName,
         phone: custPhone,
+        email: custEmail,
         isMember: custType === 'member',
         engineType: document.getElementById('engineType').value,
-        car: `${brand} ${model} (${plate})`,
+        car: `${brand}${model} (${plate})`,
+        yearKm,
         service: servicesList.map(s => s.name).join(', '),
         servicesList,
         sparepartsList: [],
-        mechanic,
+        mechanics: [],
+        mechanic: 'Menunggu Alokasi Mekanik',
         staffAdvisor: activeStaff.name,
         date: bookingDate,
         time: bookingTime,
         startedAt: bookingTime,
         estMinutes: totalDuration,
+        remainingSeconds: totalDuration * 60,
         est: `± ${totalDuration} Menit`,
-        status: 'called'
+        status: 'waiting'
     };
 
     queues.push(newTicket);
@@ -242,9 +260,25 @@ function handleStaffServiceSubmit(e) {
     document.getElementById('issuedBookingCode').textContent = bookingId;
     document.getElementById('issuedTicketSummary').innerHTML = `
         <div><strong>Pelanggan:</strong> ${custName} (${custPhone})</div>
-        <div><strong>Kendaraan:</strong> ${newTicket.car}</div>
-        <div><strong>Alokasi Bay:</strong> Bay ${bayNum} • ${mechanic}</div>
-        <div><strong>Estimasi Awal:</strong> ± ${totalDuration} Menit</div>
+        <div><strong>Kendaraan:</strong> ${newTicket.car} •${yearKm}</div>
+        <div><strong>Status Antrean:</strong> Menunggu Panggilan Bay</div>
+        <div><strong>Estimasi Durasi:</strong> ± ${totalDuration} Menit</div>
     `;
+
+    const waPhone = custPhone.replace(/^0/, '62').replace(/\D/g, '');
+    const msgText =
+        `Halo *${custName}*,\n` +
+        `Tiket antrean servis Anda di *${newTicket.branchName}* telah diterbitkan:\n\n` +
+        `• *No. Antrean:* ${ticketCode}\n` +
+        `• *No. Booking:* ${bookingId}\n` +
+        `• *Kendaraan:* ${newTicket.car} (${yearKm})\n` +
+        `• *Layanan:* ${newTicket.service}\n` +
+        `• *Estimasi Durasi:* ± ${totalDuration} Menit\n\n` +
+        `Silakan menunggu panggilan ke Bay servis dan pantau statusnya secara live di portal *Cek Antrean* DrivePro.`;
+
+    document.getElementById('btnSendTicketWa').href = `https://wa.me/${waPhone}?text=${encodeURIComponent(msgText)}`;
+    document.getElementById('btnSendTicketEmail').href =
+        `mailto:${custEmail || ''}?subject=${encodeURIComponent(`Tiket Antrean Servis DrivePro - ${ticketCode}`)}&body=${encodeURIComponent(msgText)}`;
+
     document.getElementById('staffTicketModal').style.display = 'flex';
 }

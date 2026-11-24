@@ -40,65 +40,175 @@
     box-shadow: 0 4px 12px rgba(7, 25, 61, 0.2);
 }
 
-.bay-overview-strip {
+/* Grid Bay Keseluruhan & Bay Aktif */
+.bay-overview-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
     margin-bottom: 24px;
 }
 
-.bay-mini-card {
+.bay-slot-card {
     background: var(--white);
     border: 1.5px solid #dbe3f0;
-    border-radius: 14px;
-    padding: 14px;
-    cursor: pointer;
+    border-radius: 16px;
+    padding: 16px;
     transition: all 0.2s;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
 }
 
-.bay-mini-card:hover {
+.bay-slot-card.occupied {
+    cursor: pointer;
+}
+
+.bay-slot-card.occupied:hover {
     border-color: var(--blue-accent);
     transform: translateY(-2px);
 }
 
-.bay-mini-card.selected-bay {
+.bay-slot-card.selected-bay {
     border-color: var(--blue-accent);
     background: var(--blue-soft);
     box-shadow: 0 8px 20px rgba(29, 99, 220, 0.12);
 }
 
-.bay-mini-card.my-assigned::after {
-    content: 'BAY SAYA';
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 9.5px;
-    font-weight: 800;
-    background: var(--blue-primary);
-    color: var(--white);
-    padding: 2px 7px;
-    border-radius: 6px;
+.bay-slot-card.empty-bay {
+    background: #f8fafd;
+    border-style: dashed;
 }
 
+.live-timer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 3px 9px;
+    border-radius: 7px;
+    background: #fef3c7;
+    color: #b45309;
+}
+
+/* Workspace Detail Bay Terpilih */
 .workspace-grid {
     display: grid;
-    grid-template-columns: 1.35fr 1fr;
+    grid-template-columns: minmax(0, 1.38fr) minmax(0, 1fr);
     gap: 22px;
     align-items: start;
     margin-bottom: 48px;
 }
 
-.time-adjust-bar {
+.vehicle-hero-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.vehicle-hero-left {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    gap: 14px;
+    min-width: 0;
+}
+
+.vehicle-hero-img {
+    width: 90px;
+    height: 58px;
+    object-fit: contain;
+    background: #f8fafd;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 6px;
+    flex-shrink: 0;
+}
+
+.job-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 16px;
+    background: #f8fafd;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-top: 14px;
+    font-size: 12.5px;
+}
+
+.job-meta-grid div span {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.job-meta-grid div strong {
+    color: var(--text-dark);
+    word-break: break-word;
+}
+
+.status-stepper-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px;
+}
+
+.status-step-btn {
+    padding: 10px 8px;
+    border-radius: 10px;
+    border: 1.5px solid #cbd5e1;
+    background: var(--white);
+    color: var(--text-dark);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+}
+
+.status-step-btn.active-waiting {
+    background: #f1f5f9;
+    border-color: #64748b;
+    color: #0f172a;
+}
+
+.status-step-btn.active-called {
+    background: var(--blue-soft);
+    border-color: var(--blue-accent);
+    color: var(--blue-primary);
+}
+
+.status-step-btn.active-working {
+    background: var(--warning-bg);
+    border-color: #f59e0b;
+    color: #b45309;
+}
+
+.status-step-btn.complete-btn {
+    background: #15803d;
+    border-color: #15803d;
+    color: var(--white);
+}
+
+.status-step-btn.complete-btn:hover {
+    background: #166534;
+}
+
+.time-adjust-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 7px;
     background: #f8fafd;
     border: 1px solid #dbe3f0;
-    padding: 12px 14px;
+    padding: 10px;
     border-radius: 12px;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .btn-time-step {
@@ -107,9 +217,10 @@
     color: var(--blue-primary);
     font-size: 12px;
     font-weight: 800;
-    padding: 6px 11px;
+    padding: 7px 4px;
     border-radius: 8px;
     cursor: pointer;
+    text-align: center;
     transition: all 0.15s;
 }
 
@@ -165,4 +276,7 @@
 
 @media (max-width: 920px) {
     .workspace-grid { grid-template-columns: 1fr; }
+    .status-stepper-grid { grid-template-columns: repeat(2, 1fr); }
+    .time-adjust-grid { grid-template-columns: repeat(3, 1fr); }
+    .job-meta-grid { grid-template-columns: 1fr; }
 }

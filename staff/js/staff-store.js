@@ -1,5 +1,14 @@
 // staff/js/staff-store.js
 
+const FALLBACK_CAR_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="48" viewBox="0 0 80 48" fill="none">
+        <rect width="80" height="48" rx="8" fill="#eef4ff"/>
+        <path d="M18 30h44l-4-11c-1-2.5-3-4-5.5-4h-25c-2.5 0-4.5 1.5-5.5 4l-4 11z" fill="#103c8c"/>
+        <circle cx="25" cy="32" r="4.5" fill="#07193d"/>
+        <circle cx="55" cy="32" r="4.5" fill="#07193d"/>
+    </svg>`
+);
+
 const STAFF_ACCOUNTS = [
     {
         staffId: 'STF-BDG-01',
@@ -37,9 +46,33 @@ const STAFF_ACCOUNTS = [
 ];
 
 const MECHANICS_BY_BRANCH = {
-    bandung: ['Andi Wijaya (Mekanik Senior)', 'Dedi Kurniawan (Spesialis EV & Hybrid)', 'Rizky Maulana (Mekanik Umum)'],
-    jakarta: ['Hendra Gunawan (Mekanik Senior)', 'Bagus Setiawan (Spesialis Eropa & EV)', 'Taufik Hidayat (Mekanik Umum)'],
-    surabaya: ['Surya Dharma (Mekanik Senior)', 'Eko Prasetyo (Mekanik Umum)']
+    bandung: [
+        // 6 Mekanik Bersertifikat Hybrid & Listrik (EV)
+        { name: 'Andi Wijaya (Lead EV & Hybrid)', skills: ['Bensin', 'Hybrid', 'Listrik'] },
+        { name: 'Dedi Kurniawan (Spesialis EV)', skills: ['Bensin', 'Hybrid', 'Listrik'] },
+        { name: 'Faisal Rahman (Teknisi HV & Hybrid)', skills: ['Bensin', 'Hybrid', 'Listrik'] },
+        { name: 'Bagas Pratama (Spesialis EV)', skills: ['Bensin', 'Hybrid', 'Listrik'] },
+        { name: 'Kevin Saputra (Teknisi Hybrid)', skills: ['Bensin', 'Hybrid', 'Listrik'] },
+        { name: 'Ilham Akbar (Spesialis Baterai EV)', skills: ['Bensin', 'Hybrid', 'Listrik'] },
+        // 9 Mekanik Mesin Bensin
+        { name: 'Rizky Maulana (Mekanik Senior Bensin)', skills: ['Bensin'] },
+        { name: 'Galih Permana (Teknisi Mesin & AC)', skills: ['Bensin'] },
+        { name: 'Hendra Gunawan (Mekanik Umum)', skills: ['Bensin'] },
+        { name: 'Taufik Hidayat (Mekanik Umum)', skills: ['Bensin'] },
+        { name: 'Surya Dharma (Spesialis Kaki-Kaki)', skills: ['Bensin'] },
+        { name: 'Eko Prasetyo (Mekanik Umum)', skills: ['Bensin'] },
+        { name: 'Rama Aditya (Mekanik Berkala)', skills: ['Bensin'] },
+        { name: 'Dimas Nugraha (Mekanik Berkala)', skills: ['Bensin'] },
+        { name: 'Yusuf Kurnia (Mekanik Umum)', skills: ['Bensin'] }
+    ],
+    jakarta: [
+        { name: 'Hendra Gunawan (Spesialis EV & Hybrid)', skills: ['Bensin', 'Hybrid', 'Listrik'] },
+        { name: 'Bagus Setiawan (Mekanik Umum)', skills: ['Bensin'] }
+    ],
+    surabaya: [
+        { name: 'Surya Dharma (Spesialis EV & Hybrid)', skills: ['Bensin', 'Hybrid', 'Listrik'] },
+        { name: 'Eko Prasetyo (Mekanik Umum)', skills: ['Bensin'] }
+    ]
 };
 
 const STAFF_VEHICLE_CATALOG = {
@@ -66,23 +99,25 @@ const STAFF_SERVICE_CATALOG = {
         { id: 'srv-tuneup', name: 'Tune Up Mesin Berkala', price: 380000, duration: 45 },
         { id: 'srv-rem', name: 'Pengecekan & Servis Rem 4 Roda', price: 180000, duration: 30 },
         { id: 'srv-spooring', name: 'Spooring & Balancing 4 Roda', price: 350000, duration: 45 },
-        { id: 'srv-ac', name: 'Servis AC & Pembersihan Evaporator', price: 290000, duration: 40 }
+        { id: 'srv-ac', name: 'Servis AC & Pembersihan Evaporator', price: 290000, duration: 40 },
+        { id: 'srv-lainnya', name: 'Lainnya (Perbaikan Khusus)', price: 150000, duration: 30 }
     ],
     Hybrid: [
         { id: 'srv-hyb-oli', name: 'Ganti Oli Mesin Hybrid 0W-16', price: 520000, duration: 35 },
         { id: 'srv-hyb-inv', name: 'Inverter & Hybrid Cooling Check', price: 350000, duration: 40 },
         { id: 'srv-hyb-rem', name: 'Regenerative Brake Calibration', price: 220000, duration: 30 },
-        { id: 'srv-spooring', name: 'Spooring & Balancing 4 Roda', price: 350000, duration: 45 }
+        { id: 'srv-spooring', name: 'Spooring & Balancing 4 Roda', price: 350000, duration: 45 },
+        { id: 'srv-lainnya', name: 'Lainnya (Perbaikan Khusus)', price: 150000, duration: 30 }
     ],
     Listrik: [
         { id: 'srv-ev-bat', name: 'EV Battery Health & Cell Diagnostic', price: 450000, duration: 40 },
         { id: 'srv-ev-cool', name: 'Penggantian Coolant Baterai EV', price: 390000, duration: 45 },
         { id: 'srv-ev-ac', name: 'Penggantian Filter Kabin HEPA & Sanitasi', price: 240000, duration: 25 },
-        { id: 'srv-spooring', name: 'Spooring & Balancing 4 Roda', price: 350000, duration: 45 }
+        { id: 'srv-spooring', name: 'Spooring & Balancing 4 Roda', price: 350000, duration: 45 },
+        { id: 'srv-lainnya', name: 'Lainnya (Perbaikan Khusus)', price: 150000, duration: 30 }
     ]
 };
 
-// Katalog Sparepart beserta Harga Part & Harga Jasa Pemasangan
 const SPAREPART_CATALOG = [
     { partId: 'PRT-01', name: 'Filter Oli Original', partPrice: 85000, installFee: 25000 },
     { partId: 'PRT-02', name: 'Kampas Rem Depan (1 Set)', partPrice: 340000, installFee: 90000 },
@@ -103,8 +138,8 @@ const DEMO_MEMBERS_LIST = [
         city: 'Bandung',
         points: 1250,
         vehicles: [
-            { engineType: 'Bensin', brand: 'Toyota', model: 'Avanza', plateNumber: 'D 1428 ABC' },
-            { engineType: 'Listrik', brand: 'Hyundai', model: 'Ioniq 5', plateNumber: 'D 88 EV' }
+            { engineType: 'Bensin', brand: 'Toyota', model: 'Avanza', plateNumber: 'D 1428 ABC', yearKm: '2022 • 42.500 km' },
+            { engineType: 'Listrik', brand: 'Hyundai', model: 'Ioniq 5', plateNumber: 'D 88 EV', yearKm: '2024 • 14.200 km' }
         ]
     }
 ];
@@ -119,7 +154,37 @@ function formatRupiah(num) {
     return 'Rp ' + Number(num || 0).toLocaleString('id-ID');
 }
 
-// Inisialisasi data antrean awal agar langsung terisi & sinkron dengan customer
+function getStaffCarImage(carLabel) {
+    const lower = (carLabel || '').toLowerCase();
+    if (lower.includes('ioniq') || lower.includes('hyundai') || lower.includes('ev') || lower.includes('listrik')) {
+        return 'assets/ioniq.png';
+    }
+    return 'assets/avanza.png';
+}
+
+function getMechanicsStatusByEngine(branchKey, engineType) {
+    const allMechs = MECHANICS_BY_BRANCH[branchKey] || MECHANICS_BY_BRANCH.bandung;
+    const activeQueues = ensureInitialWorkshopQueues().filter(
+        q => (q.branch || 'bandung') === branchKey && q.status !== 'done' && q.status !== 'waiting' && Number(q.bay) > 0
+    );
+
+    return allMechs
+        .filter(m => !engineType || m.skills.includes(engineType))
+        .map(m => {
+            const busyJob = activeQueues.find(q =>
+                (Array.isArray(q.mechanics) && q.mechanics.includes(m.name)) ||
+                (q.mechanic && q.mechanic.includes(m.name))
+            );
+            return {
+                name: m.name,
+                skills: m.skills,
+                isBusy: Boolean(busyJob),
+                busyBay: busyJob ? busyJob.bay : null,
+                busyEst: busyJob ? busyJob.est : null
+            };
+        });
+}
+
 function ensureInitialWorkshopQueues() {
     const existing = JSON.parse(localStorage.getItem('drivepro_bookings_list') || '[]');
     if (existing.length > 0) return existing;
@@ -127,16 +192,18 @@ function ensureInitialWorkshopQueues() {
     const todayStr = new Date().toISOString().slice(0, 10);
     const initialQueues = [
         {
-            bookingId: 'BK-20261123-015',
+            bookingId: 'BK-20261124-015',
             ticket: 'A-015',
             branch: 'bandung',
             branchName: 'DrivePro Bandung',
             bay: 1,
             name: 'Budi Santoso',
             phone: '081234567890',
+            email: 'budi@email.com',
             isMember: true,
             engineType: 'Bensin',
             car: 'Toyota Avanza (D 1428 ABC)',
+            yearKm: '2022 • 42.500 km',
             service: 'Ganti Oli Mesin Sintetik 4L, Pengecekan & Servis Rem 4 Roda',
             servicesList: [
                 { id: 'srv-oli', name: 'Ganti Oli Mesin Sintetik 4L', price: 420000, duration: 30 },
@@ -145,67 +212,75 @@ function ensureInitialWorkshopQueues() {
             sparepartsList: [
                 { partId: 'PRT-01', name: 'Filter Oli Original', partPrice: 85000, installFee: 25000, qty: 1 }
             ],
-            mechanic: 'Andi Wijaya (Mekanik Senior)',
+            mechanics: ['Rizky Maulana (Mekanik Senior Bensin)'],
+            mechanic: 'Rizky Maulana (Mekanik Senior Bensin)',
             staffAdvisor: 'Raka Pratama',
             date: todayStr,
             time: '10:30 WIB',
             startedAt: '10:35 WIB',
             estMinutes: 15,
+            remainingSeconds: 15 * 60,
             est: '± 15 Menit',
             status: 'called'
         },
         {
-            bookingId: 'BK-20261123-012',
+            bookingId: 'BK-20261124-012',
             ticket: 'A-012',
             branch: 'bandung',
             branchName: 'DrivePro Bandung',
             bay: 2,
             name: 'Budi Santoso',
             phone: '081234567890',
+            email: 'budi@email.com',
             isMember: true,
             engineType: 'Listrik',
             car: 'Hyundai Ioniq 5 (D 88 EV)',
+            yearKm: '2024 • 14.200 km',
             service: 'EV Battery Health & Cell Diagnostic, Spooring & Balancing 4 Roda',
             servicesList: [
                 { id: 'srv-ev-bat', name: 'EV Battery Health & Cell Diagnostic', price: 450000, duration: 40 },
                 { id: 'srv-spooring', name: 'Spooring & Balancing 4 Roda', price: 350000, duration: 45 }
             ],
             sparepartsList: [],
-            mechanic: 'Dedi Kurniawan (Spesialis EV & Hybrid)',
+            mechanics: ['Andi Wijaya (Lead EV & Hybrid)'],
+            mechanic: 'Andi Wijaya (Lead EV & Hybrid)',
             staffAdvisor: 'Raka Pratama',
             date: todayStr,
             time: '09:30 WIB',
             startedAt: '09:40 WIB',
             estMinutes: 25,
+            remainingSeconds: 25 * 60,
             est: '± 25 Menit',
             status: 'working'
         },
         {
-            bookingId: 'BK-20261123-013',
-            ticket: 'A-013',
+            bookingId: 'BK-20261124-016',
+            ticket: 'A-016',
             branch: 'bandung',
             branchName: 'DrivePro Bandung',
-            bay: 3,
-            name: 'Nadia Putri',
-            phone: '08131112223',
+            bay: 0,
+            name: 'Siti Rahmawati',
+            phone: '081398765432',
+            email: 'siti@email.com',
             isMember: false,
             engineType: 'Bensin',
-            car: 'Mitsubishi Xpander (D 5510 KLM)',
+            car: 'Honda Brio (D 5512 KLP)',
+            yearKm: '2021 • 36.000 km',
             service: 'Tune Up Mesin Berkala',
             servicesList: [
                 { id: 'srv-tuneup', name: 'Tune Up Mesin Berkala', price: 380000, duration: 45 }
             ],
-            sparepartsList: [
-                { partId: 'PRT-04', name: 'Busi Iridium (Per Pcs)', partPrice: 125000, installFee: 20000, qty: 4 }
-            ],
-            mechanic: 'Rizky Maulana (Mekanik Umum)',
+            sparepartsList: [],
+            mechanics: [],
+            mechanic: 'Menunggu Alokasi Mekanik',
             staffAdvisor: 'Raka Pratama',
             date: todayStr,
-            time: '10:00 WIB',
-            startedAt: '10:12 WIB',
-            estMinutes: 35,
-            est: '± 35 Menit',
-            status: 'working'
+            time: '10:45 WIB',
+            startedAt: '10:45 WIB',
+            estMinutes: 45,
+            remainingSeconds: 45 * 60,
+            est: '± 45 Menit',
+            status: 'waiting'
         }
     ];
 
@@ -220,8 +295,8 @@ function getCompletedHistoryList() {
     const todayStr = new Date().toISOString().slice(0, 10);
     const initialHistory = [
         {
-            trxId: 'TRX-20261123-004',
-            bookingId: 'BK-20261123-004',
+            trxId: 'TRX-20261124-004',
+            bookingId: 'BK-20261124-004',
             branch: 'bandung',
             branchName: 'DrivePro Bandung',
             date: todayStr,
@@ -232,8 +307,9 @@ function getCompletedHistoryList() {
             customerName: 'Hendrik Wijaya',
             customerPhone: '08122334455',
             car: 'Honda HR-V (D 1920 ZAA)',
+            yearKm: '2021 • 58.000 km',
             staffAdvisor: 'Raka Pratama',
-            mechanic: 'Andi Wijaya (Mekanik Senior)',
+            mechanic: 'Rizky Maulana (Mekanik Senior Bensin)',
             servicesList: [
                 { name: 'Ganti Oli Mesin Sintetik 4L', price: 420000 },
                 { name: 'Pengecekan & Servis Rem 4 Roda', price: 180000 }
@@ -244,56 +320,6 @@ function getCompletedHistoryList() {
             ],
             totalAmount: 1140000,
             paymentStatus: 'Menunggu Pembayaran POS'
-        },
-        {
-            trxId: 'TRX-20261123-002',
-            bookingId: 'BK-20261123-002',
-            branch: 'bandung',
-            branchName: 'DrivePro Bandung',
-            date: todayStr,
-            bookingTime: '08:30 WIB',
-            startedAt: '08:35 WIB',
-            finishedAt: '09:20 WIB',
-            durationMinutes: 45,
-            customerName: 'Sinta Maharani',
-            customerPhone: '08177889900',
-            car: 'Wuling Air EV (D 310 EV)',
-            staffAdvisor: 'Raka Pratama',
-            mechanic: 'Dedi Kurniawan (Spesialis EV & Hybrid)',
-            servicesList: [
-                { name: 'EV Battery Health & Cell Diagnostic', price: 450000 },
-                { name: 'Penggantian Filter Kabin HEPA & Sanitasi', price: 240000 }
-            ],
-            sparepartsList: [
-                { name: 'Filter Kabin AC HEPA', partPrice: 175000, installFee: 25000, qty: 1 }
-            ],
-            totalAmount: 890000,
-            paymentStatus: 'Menunggu Pembayaran POS'
-        },
-        {
-            trxId: 'TRX-20261122-018',
-            bookingId: 'BK-20261122-018',
-            branch: 'bandung',
-            branchName: 'DrivePro Bandung',
-            date: '2026-11-22',
-            bookingTime: '14:00 WIB',
-            startedAt: '14:10 WIB',
-            finishedAt: '15:25 WIB',
-            durationMinutes: 75,
-            customerName: 'Budi Santoso',
-            customerPhone: '081234567890',
-            car: 'Toyota Avanza (D 1428 ABC)',
-            staffAdvisor: 'Raka Pratama',
-            mechanic: 'Rizky Maulana (Mekanik Umum)',
-            servicesList: [
-                { name: 'Tune Up Mesin Berkala', price: 380000 },
-                { name: 'Spooring & Balancing 4 Roda', price: 350000 }
-            ],
-            sparepartsList: [
-                { name: 'Busi Iridium (Per Pcs)', partPrice: 125000, installFee: 20000, qty: 4 }
-            ],
-            totalAmount: 1310000,
-            paymentStatus: 'Lunas (POS)'
         }
     ];
 

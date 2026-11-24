@@ -17,12 +17,32 @@
     opacity: 0.85;
 }
 
+/* Kunci lebar kolom kiri & kanan dengan Flexbox persentase tetap */
 .service-split-layout {
-    display: grid;
-    grid-template-columns: 1.55fr 1fr;
+    display: flex;
+    align-items: flex-start;
     gap: 24px;
-    align-items: start;
+    width: 100%;
     margin-bottom: 48px;
+}
+
+.service-split-layout > div:first-child {
+    flex: 0 0 calc(62% - 12px);
+    max-width: calc(62% - 12px);
+    min-width: 0;
+}
+
+.sticky-summary-card {
+    flex: 0 0 calc(38% - 12px);
+    max-width: calc(38% - 12px);
+    min-width: 0;
+    position: sticky;
+    top: 86px;
+    background: var(--white);
+    border: 1.5px solid #dbe3f0;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: var(--shadow-soft);
 }
 
 .form-step-card {
@@ -32,6 +52,8 @@
     padding: 24px;
     box-shadow: var(--shadow-soft);
     margin-bottom: 20px;
+    width: 100%;
+    overflow: hidden;
 }
 
 .step-heading {
@@ -55,11 +77,12 @@
     justify-content: center;
     font-size: 13px;
     font-weight: 800;
+    flex-shrink: 0;
 }
 
 .radio-toggle-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
     margin-bottom: 16px;
 }
@@ -76,6 +99,7 @@
     font-weight: 700;
     color: var(--text-dark);
     transition: all 0.2s;
+    min-width: 0;
 }
 
 .radio-pill-card.active {
@@ -89,12 +113,22 @@
     border: 1px solid #dbe3f0;
     border-radius: 14px;
     padding: 16px;
+    width: 100%;
 }
 
 .lookup-input-row {
     display: flex;
     gap: 10px;
     margin-top: 8px;
+}
+
+.lookup-input-row input {
+    flex: 1;
+    min-width: 0;
+}
+
+.lookup-input-row button {
+    flex-shrink: 0;
 }
 
 .member-banner {
@@ -109,7 +143,7 @@
 
 .saved-vehicles-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
 }
 
@@ -123,6 +157,12 @@
     background: var(--white);
     cursor: pointer;
     transition: all 0.2s;
+    min-width: 0;
+}
+
+.saved-veh-card > div {
+    min-width: 0;
+    overflow-wrap: break-word;
 }
 
 .saved-veh-card.selected {
@@ -137,12 +177,17 @@
     border-radius: 6px;
     background: #f8fafd;
     padding: 2px;
+    flex-shrink: 0;
 }
 
 .form-grid-2 {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
+}
+
+.field-group {
+    min-width: 0;
 }
 
 .field-group label {
@@ -155,7 +200,7 @@
 
 .service-checklist-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
 }
 
@@ -168,6 +213,7 @@
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s;
+    min-width: 0;
 }
 
 .srv-check-card:hover {
@@ -180,28 +226,42 @@
     height: 17px;
     margin-top: 3px;
     accent-color: var(--blue-accent);
+    flex-shrink: 0;
 }
 
-.sticky-summary-card {
-    position: sticky;
-    top: 86px;
-    background: var(--white);
-    border: 1.5px solid #dbe3f0;
-    border-radius: 18px;
-    padding: 24px;
-    box-shadow: var(--shadow-soft);
+.srv-check-card > div {
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .summary-row {
     display: flex;
     justify-content: space-between;
+    gap: 12px;
     font-size: 13.5px;
     padding: 8px 0;
     border-bottom: 1px dashed #e2e8f0;
 }
 
 @media (max-width: 900px) {
-    .service-split-layout { grid-template-columns: 1fr; }
-    .sticky-summary-card { position: static; }
-    .form-grid-2, .service-checklist-grid, .radio-toggle-grid { grid-template-columns: 1fr; }
+    .service-split-layout {
+        flex-direction: column;
+    }
+    .service-split-layout > div:first-child,
+    .sticky-summary-card {
+        flex: 1 1 100%;
+        max-width: 100%;
+        width: 100%;
+        position: static;
+    }
+    .form-grid-2,
+    .service-checklist-grid,
+    .radio-toggle-grid,
+    .saved-vehicles-grid {
+        grid-template-columns: 1fr;
+    }
+    .lookup-input-row {
+        flex-direction: column;
+    }
 }

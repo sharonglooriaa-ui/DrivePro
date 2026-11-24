@@ -1,7 +1,10 @@
 // staff/js/antrean.js
 let currentStaff = null;
-let bayViewMode = 'mine'; // 'mine' atau 'all'
-let selectedBayNumber = 1;
+let bayViewMode = 'mine';
+let selectedBayNumber = null;
+let modalTargetBay = null;
+let isEditingServices = false;
+let countdownIntervalId = null;
 
 const TOTAL_BAYS_MAP = {
     bandung: 6,
@@ -14,85 +17,337 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('navBranchLabel').textContent = currentStaff.branchName.toUpperCase();
     ensureInitialWorkshopQueues();
 
-    selectedBayNumber = (currentStaff.assignedBays && currentStaff.assignedBays[0]) || 1;
+    const myActiveJobs = getMyActiveAssignedJobs();
+    selectedBayNumber = myActiveJobs.length > 0 ? Number(myActiveJobs[0].bay) : null;
+
     renderStaffQueueWorkspace();
+    startLiveCountdownTicker();
 });
-
-function switchBayViewMode(mode) {
-    bayViewMode = mode;
-    document.getElementById('btnModeMyBays').classList.toggle('active', mode === 'mine');
-    document.getElementById('btnModeAllBays').classList.toggle('active', mode === 'all');
-    document.getElementById('bayStripHeading').textContent = mode === 'mine'
-        ? 'Daftar Bay Tugas Anda (Klik Bay untuk Mengelola):'
-        : `Monitor Seluruh Bay — ${currentStaff.branchName} (Klik Bay Manapun untuk Cek / Edit):`;
-
-    if (mode === 'mine' && currentStaff.assignedBays && !currentStaff.assignedBays.includes(selectedBayNumber)) {
-        selectedBayNumber = currentStaff.assignedBays[0];
-    }
-    renderStaffQueueWorkspace();
-}
-
-function selectWorkshopBay(bayNum) {
-    selectedBayNumber = bayNum;
-    renderStaffQueueWorkspace();
-}
 
 function getBranchQueues() {
     const all = ensureInitialWorkshopQueues();
     return all.filter(q => (q.branch || 'bandung').toLowerCase() === currentStaff.branchKey);
 }
 
+function getUnassignedWaitingQueues() {
+    return getBranchQueues().filter(q =>
+        q.status !== 'done' && (!q.bay || Number(q.bay) === 0 || q.status === 'waiting')
+    );
+}
+
+function getMyActiveAssignedJobs() {
+    const myBays = currentStaff.assignedBays || [1, 2];
+    return getBranchQueues().filter(q =>
+        q.status !== 'done' &&
+        q.status !== 'waiting' &&
+        Number(q.bay) > 0 &&
+        (myBays.includes(Number(q.bay)) || q.staffAdvisor === currentStaff.name)
+    );
+}
+
+function formatSecondsCountdown(totalSec) {
+    const safeSec = Math.max(0, Math.floor(totalSec));
+    const mins = Math.floor(safeSec / 60);
+    const secs = safeSec % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+}
+
+function startLiveCountdownTicker() {
+    if (countdownIntervalId) clearInterval(countdownIntervalId);
+    countdownIntervalId = setInterval(() => {
+        const all = ensureInitialWorkshopQueues();
+        let changed = false;
+
+        all.forEach(job => {
+            if (job.status !== 'done' && job.status !== 'waiting' && Number(job.bay) > 0) {
+                if (typeof job.remainingSeconds !== 'number') {
+                    job.remainingSeconds = Number(job.estMinutes || 15) * 60;
+                }
+                if (job.remainingSeconds > 0) {
+                    job.remainingSeconds -= 1;
+                    const remMins = Math.ceil(job.remainingSeconds / 60);
+                    job.estMinutes = remMins;
+                    job.est = `± ${remMins} Menit`;
+                    changed = true;
+                }
+            }
+        });
+
+        if (changed) {
+            localStorage.setItem('drivepro_bookings_list', JSON.stringify(all));
+            all.forEach(job => {
+                const timerEl = document.getElementById(`live-timer-${job.bookingId}`);
+                if (timerEl) {
+                    timerEl.textContent = formatSecondsCountdown(job.remainingSeconds);
+                }
+                const estLabelEl = document.getElementById(`workspace-est-label-${job.bookingId}`);
+                if (estLabelEl) {
+                    estLabelEl.textContent = `${job.est} (${formatSecondsCountdown(job.remainingSeconds)})`;
+                }
+            });
+        }
+    }, 1000);
+}
+
+function switchBayViewMode(mode) {
+    bayViewMode = mode;
+    isEditingServices = false;
+    document.getElementById('btnModeMyBays').classList.toggle('active', mode === 'mine');
+    document.getElementById('btnModeAllBays').classList.toggle('active', mode === 'all');
+
+    if (mode === 'mine') {
+        const myActive = getMyActiveAssignedJobs();
+        selectedBayNumber = myActive.length > 0 ? Number(myActive[0].bay) : null;
+    }
+
+    renderStaffQueueWorkspace();
+}
+
+function selectWorkshopBay(bayNum) {
+    selectedBayNumber = bayNum;
+    isEditingServices = false;
+    renderStaffQueueWorkspace();
+}
+
+function toggleEditServicesMode() {
+    isEditingServices = !isEditingServices;
+    renderStaffQueueWorkspace();
+}
+
+/* =========================================================
+   POP-UP MODAL ALOKASI UNIT & MEKANIK KE BAY KOSONG
+   ========================================================= */
+function openAssignBayModal(bayNum) {
+    const waitingList = getUnassignedWaitingQueues();
+    if (waitingList.length === 0) {
+        alert('Tidak ada tiket antrean yang sedang menunggu.');
+        return;
+    }
+
+    modalTargetBay = bayNum;
+    document.getElementById('assignModalTitle').textContent = `Alokasikan Unit ke Bay ${bayNum}`;
+
+    const sel = document.getElementById('modalQueueSelect');
+    sel.innerHTML = `<option value="">-- Pilih No. Antrean --</option>` + waitingList.map(w => {
+        const eng = w.engineType || (w.car.toLowerCase().includes('ioniq') || w.car.toLowerCase().includes('ev') ? 'Listrik' : 'Bensin');
+        return `<option value="${w.bookingId}">${w.ticket} • ${w.car} (${eng}) — ${w.name}</option>`;
+    }).join('');
+
+    document.getElementById('modalVehicleInfoBox').style.display = 'none';
+    document.getElementById('modalMechanicSection').style.display = 'none';
+    document.getElementById('assignBayModal').style.display = 'flex';
+}
+
+function closeAssignBayModal() {
+    modalTargetBay = null;
+    document.getElementById('assignBayModal').style.display = 'none';
+}
+
+function onModalQueueSelected(bookingId) {
+    const infoBox = document.getElementById('modalVehicleInfoBox');
+    const mechSection = document.getElementById('modalMechanicSection');
+    const mechLabel = document.getElementById('modalMechanicLabel');
+    const mechChecklist = document.getElementById('modalMechanicChecklist');
+
+    if (!bookingId) {
+        infoBox.style.display = 'none';
+        mechSection.style.display = 'none';
+        return;
+    }
+
+    const job = getBranchQueues().find(q => q.bookingId === bookingId);
+    if (!job) return;
+
+    const engineType = job.engineType || (job.car.toLowerCase().includes('ioniq') || job.car.toLowerCase().includes('ev') ? 'Listrik' : 'Bensin');
+    const mechList = getMechanicsStatusByEngine(currentStaff.branchKey, engineType);
+    const availableCount = mechList.filter(m => !m.isBusy).length;
+
+    infoBox.style.display = 'block';
+    infoBox.innerHTML = `
+        <div style="font-weight:800; color:var(--blue-dark);">${job.car} • Tipe Mesin: ${engineType}</div>
+        <div style="color:var(--text-muted); margin-top:2px;">Layanan: ${job.service} (${job.est})</div>
+    `;
+
+    mechLabel.textContent = `2. Pilih Mekanik Spesialis ${engineType} (${availableCount} Tersedia) *`;
+    mechSection.style.display = 'block';
+
+    let autoPicked = false;
+    mechChecklist.innerHTML = mechList.map(m => {
+        let isChecked = false;
+        if (!m.isBusy && !autoPicked) {
+            isChecked = true;
+            autoPicked = true;
+        }
+
+        const badge = m.isBusy
+            ? `<span style="font-size:10.5px; font-weight:700; color:#b45309; background:#fef3c7; padding:2px 6px; border-radius:5px; margin-left:auto;">Bay ${m.busyBay}</span>`
+            : `<span style="font-size:10.5px; font-weight:700; color:#15803d; background:#dcfce7; padding:2px 6px; border-radius:5px; margin-left:auto;">Kosong</span>`;
+
+        return `
+            <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:var(--text-dark); cursor:pointer; padding:5px 6px; border-radius:6px;">
+                <input type="checkbox" name="modalChosenMechs" value="${m.name}" ${isChecked ? 'checked' : ''} style="width:15px; height:15px; accent-color:var(--blue-accent); flex-shrink:0;">
+                <span style="min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${m.name}</span>
+                ${badge}
+            </label>
+        `;
+    }).join('');
+}
+
+function confirmAssignQueueFromModal() {
+    if (!modalTargetBay) return;
+    const bookingId = document.getElementById('modalQueueSelect').value;
+    if (!bookingId) {
+        alert('Pilih nomor antrean terlebih dahulu.');
+        return;
+    }
+
+    const chosenMechs = Array.from(document.querySelectorAll('input[name="modalChosenMechs"]:checked')).map(cb => cb.value);
+    if (chosenMechs.length === 0) {
+        alert('Pilih minimal 1 mekanik yang bertugas.');
+        return;
+    }
+
+    const all = ensureInitialWorkshopQueues();
+    const idx = all.findIndex(q => q.bookingId === bookingId);
+    if (idx === -1) return;
+
+    const job = all[idx];
+    job.bay = modalTargetBay;
+    job.status = 'called';
+    job.mechanics = chosenMechs;
+    job.mechanic = chosenMechs.join(', ');
+    job.staffAdvisor = currentStaff.name;
+    if (typeof job.remainingSeconds !== 'number') {
+        job.remainingSeconds = Number(job.estMinutes || 20) * 60;
+    }
+
+    localStorage.setItem('drivepro_bookings_list', JSON.stringify(all));
+    closeAssignBayModal();
+    renderStaffQueueWorkspace();
+}
+
+/* =========================================================
+   RENDER UTAMA (TAB BAY SAYA vs TAB CEK BAY KESELURUHAN)
+   ========================================================= */
 function renderStaffQueueWorkspace() {
     const totalBays = TOTAL_BAYS_MAP[currentStaff.branchKey] || 6;
     const branchQueues = getBranchQueues();
-    const myBays = currentStaff.assignedBays || [1, 2];
+    const waitingList = getUnassignedWaitingQueues();
+    const myActiveJobs = getMyActiveAssignedJobs();
 
-    const bayNumbersToRender = bayViewMode === 'mine'
-        ? myBays
-        : Array.from({ length: totalBays }, (_, i) => i + 1);
+    document.getElementById('waitingQueueCountBadge').textContent =
+        `${waitingList.length} Tiket Antrean Menunggu Alokasi Bay`;
 
-    // 1. Render Strip Kartu Bay
     const stripEl = document.getElementById('staffBayStripContainer');
-    stripEl.innerHTML = bayNumbersToRender.map(bayNum => {
-        const job = branchQueues.find(q => Number(q.bay) === bayNum && q.status !== 'done');
-        const isSelected = bayNum === selectedBayNumber;
-        const isMine = myBays.includes(bayNum);
-
-        let badgeClass = 'waiting';
-        let badgeText = 'Kosong';
-        if (job) {
-            badgeClass = job.status;
-            badgeText = job.status === 'called' ? 'Dipanggil' : (job.status === 'working' ? 'Dikerjakan' : 'Menunggu');
-        }
-
-        return `
-            <div class="bay-mini-card ${isSelected ? 'selected-bay' : ''} ${isMine ? 'my-assigned' : ''}" onclick="selectWorkshopBay(${bayNum})">
-                <div style="font-size:14px; font-weight:800; color:var(--blue-dark); margin-bottom:4px;">Bay ${bayNum}</div>
-                <span class="status-pill ${badgeClass}" style="margin-bottom:6px;">${badgeText}</span>
-                <div style="font-size:12.5px; font-weight:700; color:var(--text-dark); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                    ${job ? `${job.ticket} • ${job.car}` : 'Siap Menerima Unit'}
-                </div>
-                <small style="color:var(--text-muted);">${job ? job.est : '-'}</small>
-            </div>
-        `;
-    }).join('');
-
-    // 2. Render Panel Kerja Detail untuk Bay Terpilih
     const workspaceEl = document.getElementById('bayWorkspaceContainer');
-    const activeJob = branchQueues.find(q => Number(q.bay) === selectedBayNumber && q.status !== 'done');
 
-    if (!activeJob) {
+    // MODE 2: CEK BAY KESELURUHAN (HANYA RINGKASAN STATUS BAY & TOMBOL POP-UP BAY KOSONG, TANPA DETAIL)
+    if (bayViewMode === 'all') {
+        document.getElementById('bayStripHeading').textContent =
+            `Status Seluruh Bay — ${currentStaff.branchName} (${totalBays} Bay):`;
+
+        workspaceEl.innerHTML = ''; // Tidak tampilkan detail pengerjaan di tab Cek Bay Keseluruhan
+
+        const allBayNums = Array.from({ length: totalBays }, (_, i) => i + 1);
+        stripEl.innerHTML = allBayNums.map(bayNum => {
+            const job = branchQueues.find(q => Number(q.bay) === bayNum && q.status !== 'done' && q.status !== 'waiting');
+
+            if (!job) {
+                return `
+                    <div class="bay-slot-card empty-bay" style="min-height:165px;">
+                        <div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <strong style="font-size:16px; color:var(--blue-dark);">Bay ${bayNum}</strong>
+                                <span class="status-pill waiting">Kosong</span>
+                            </div>
+                            <p style="font-size:12.5px; color:var(--text-muted); margin:0;">
+                                Bay tersedia dan siap diisi unit dari antrean menunggu.
+                            </p>
+                        </div>
+                        <button type="button" class="btn-primary" style="width:100%; padding:9px 12px; font-size:12.5px;" onclick="openAssignBayModal(${bayNum})">
+                            + Masukkan Unit ke Bay ${bayNum}
+                        </button>
+                    </div>
+                `;
+            }
+
+            const remSec = typeof job.remainingSeconds === 'number' ? job.remainingSeconds : Number(job.estMinutes || 15) * 60;
+            const badgeText = job.status === 'called' ? 'Dipanggil' : 'Sedang Dikerjakan';
+
+            return `
+                <div class="bay-slot-card" style="min-height:165px; cursor:default;">
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <strong style="font-size:16px; color:var(--blue-dark);">Bay ${bayNum} • ${job.ticket}</strong>
+                            <span class="live-timer-badge" id="live-timer-${job.bookingId}">${formatSecondsCountdown(remSec)}</span>
+                        </div>
+                        <span class="status-pill ${job.status}" style="margin-bottom:10px;">${badgeText}</span>
+                        <div style="font-size:13.5px; font-weight:800; color:var(--text-dark); margin-bottom:4px;">${job.car}</div>
+                    </div>
+                    <div style="background:#f8fafd; border-radius:8px; padding:7px 9px; font-size:11.5px; color:var(--text-muted);">
+                        <div><strong>PIC Advisor:</strong> ${job.staffAdvisor || '-'}</div>
+                        <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><strong>Mekanik:</strong> ${job.mechanic || '-'}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        return;
+    }
+
+    // MODE 1: BAY SAYA (AKTIF) — MENAMPILKAN BAY AKTIF MILIK AKUN INI + DETAIL PENGERJAAN
+    document.getElementById('bayStripHeading').textContent =
+        `Bay Aktif yang Sedang Anda Tangani (${myActiveJobs.length} Unit Aktif):`;
+
+    if (myActiveJobs.length === 0) {
+        stripEl.innerHTML = '';
         workspaceEl.innerHTML = `
-            <div class="card-box" style="text-align:center; padding:44px 24px; margin-bottom:48px;">
-                <h3 style="font-size:18px; font-weight:800; color:var(--blue-dark); margin-bottom:6px;">Bay ${selectedBayNumber} Saat Ini Kosong</h3>
-                <p style="font-size:13.5px; color:var(--text-muted); margin-bottom:18px;">Belum ada kendaraan yang dialokasikan ke Bay ${selectedBayNumber}.</p>
-                <a href="service.html" class="btn-primary">+ Input Pelanggan Walk-In ke Bay ${selectedBayNumber}</a>
+            <div class="card-box" style="text-align:center; padding:48px 24px; margin-bottom:48px;">
+                <h3 style="font-size:18px; font-weight:800; color:var(--blue-dark); margin-bottom:6px;">
+                    Semua Pengerjaan Bay Anda Sudah Selesai!
+                </h3>
+                <p style="font-size:13.5px; color:var(--text-muted); margin-bottom:20px;">
+                    Tidak ada unit aktif yang tersisa di daftar Bay Saya. Buka tab <strong>Cek Bay Keseluruhan</strong> untuk memasukkan antrean berikutnya ke bay yang kosong.
+                </p>
+                <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+                    <button type="button" class="btn-primary" onclick="switchBayViewMode('all')">Buka Cek Bay Keseluruhan</button>
+                    <a href="service.html" class="btn-outline">+ Input Pelanggan Baru</a>
+                </div>
             </div>
         `;
         return;
     }
 
-    // Pastikan struktur servicesList & sparepartsList selalu tersedia
+    if (!myActiveJobs.some(j => Number(j.bay) === selectedBayNumber)) {
+        selectedBayNumber = Number(myActiveJobs[0].bay);
+    }
+
+    stripEl.innerHTML = myActiveJobs.map(job => {
+        const bayNum = Number(job.bay);
+        const isSelected = bayNum === selectedBayNumber;
+        const remSec = typeof job.remainingSeconds === 'number' ? job.remainingSeconds : Number(job.estMinutes || 15) * 60;
+        const badgeText = job.status === 'called' ? 'Dipanggil' : 'Sedang Dikerjakan';
+
+        return `
+            <div class="bay-slot-card occupied ${isSelected ? 'selected-bay' : ''}" onclick="selectWorkshopBay(${bayNum})">
+                <div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <strong style="font-size:15px; color:var(--blue-dark);">Bay ${bayNum} • ${job.ticket}</strong>
+                        <span class="live-timer-badge" id="live-timer-${job.bookingId}">${formatSecondsCountdown(remSec)}</span>
+                    </div>
+                    <span class="status-pill ${job.status}" style="margin-bottom:8px;">${badgeText}</span>
+                    <div style="font-size:13.5px; font-weight:800; color:var(--text-dark);">${job.car}</div>
+                    <small style="color:var(--text-muted);">${job.name} • ${job.yearKm || ''}</small>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    const activeJob = myActiveJobs.find(q => Number(q.bay) === selectedBayNumber);
+    if (!activeJob) {
+        workspaceEl.innerHTML = '';
+        return;
+    }
+
     if (!Array.isArray(activeJob.servicesList)) {
         activeJob.servicesList = [{ id: 'custom-1', name: activeJob.service || 'Servis Berkala', price: 350000, duration: 30 }];
     }
@@ -101,100 +356,140 @@ function renderStaffQueueWorkspace() {
     }
 
     const engineKey = activeJob.engineType || (activeJob.car.toLowerCase().includes('ioniq') || activeJob.car.toLowerCase().includes('ev') ? 'Listrik' : 'Bensin');
-    const availableServices = STAFF_SERVICE_CATALOG[engineKey] || STAFF_SERVICE_CATALOG.Bensin;
+    const catalogServices = STAFF_SERVICE_CATALOG[engineKey] || STAFF_SERVICE_CATALOG.Bensin;
 
     const srvSubtotal = activeJob.servicesList.reduce((acc, s) => acc + Number(s.price || 0), 0);
     const partSubtotal = activeJob.sparepartsList.reduce((acc, p) => acc + ((Number(p.partPrice) + Number(p.installFee)) * Number(p.qty)), 0);
     const grandTotal = srvSubtotal + partSubtotal;
+    const remSec = typeof activeJob.remainingSeconds === 'number' ? activeJob.remainingSeconds : Number(activeJob.estMinutes || 15) * 60;
+    const carImg = getStaffCarImage(activeJob.car);
 
-    const isEv = engineKey === 'Listrik' || activeJob.car.toLowerCase().includes('ioniq');
-    const carImg = isEv ? 'assets/ioniq.png' : 'assets/avanza.png';
+    const selectedIds = activeJob.servicesList.map(s => s.id);
+    const serviceSectionHtml = isEditingServices
+        ? `
+            <div style="background:#f8fafd; border:1.5px solid #bfdbfe; border-radius:12px; padding:14px;">
+                <strong style="display:block; font-size:13px; color:var(--blue-primary); margin-bottom:10px;">
+                    Centang Jenis Layanan yang Sesuai Hasil Pengecekan:
+                </strong>
+                <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
+                    ${catalogServices.map(srv => {
+                        const isChecked = selectedIds.includes(srv.id);
+                        return `
+                            <label style="display:flex; justify-content:space-between; align-items:center; background:#ffffff; border:1px solid #dbe3f0; padding:10px 12px; border-radius:10px; cursor:pointer;">
+                                <div style="display:flex; align-items:center; gap:10px;">
+                                    <input type="checkbox" class="edit-srv-checkbox" value="${srv.id}" ${isChecked ? 'checked' : ''} style="width:16px; height:16px; accent-color:var(--blue-accent);">
+                                    <span style="font-size:13px; font-weight:700; color:var(--blue-dark);">${srv.name}</span>
+                                </div>
+                                <strong style="font-size:12.5px; color:var(--blue-primary);">${formatRupiah(srv.price)}</strong>
+                            </label>
+                        `;
+                    }).join('')}
+                </div>
+                <div style="display:flex; gap:8px; justify-content:flex-end;">
+                    <button type="button" class="btn-outline" onclick="toggleEditServicesMode()">Batal</button>
+                    <button type="button" class="btn-primary" onclick="saveEditedServices('${activeJob.bookingId}', '${engineKey}')">Simpan Perubahan Servis</button>
+                </div>
+            </div>
+        `
+        : `
+            <div>
+                ${activeJob.servicesList.map((srv) => `
+                    <div class="item-line-row">
+                        <div>
+                            <strong style="display:block; font-size:13.5px; color:var(--blue-dark);">${srv.name}</strong>
+                            <small style="color:var(--text-muted);">Estimasi ± ${srv.duration || 30} mnt</small>
+                        </div>
+                        <strong style="font-size:13.5px; color:var(--blue-primary);">${formatRupiah(srv.price)}</strong>
+                    </div>
+                `).join('')}
+            </div>
+        `;
 
     workspaceEl.innerHTML = `
         <div class="workspace-grid">
-            <!-- KOLOM KIRI: STATUS, KONTROL WAKTU & REVISI ITEM SERVIS -->
             <div style="display:flex; flex-direction:column; gap:20px;">
-                <!-- Kartu Identitas Kendaraan & Kontrol Progres/Waktu -->
                 <div class="card-box">
-                    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; padding-bottom:16px; border-bottom:1px solid #e2e8f0;">
-                        <div style="display:flex; align-items:center; gap:14px;">
-                            <img src="${carImg}" alt="${activeJob.car}" style="width:82px; height:52px; object-fit:contain; background:#f8fafd; border:1px solid #e2e8f0; border-radius:10px; padding:4px;">
+                    <div class="vehicle-hero-header">
+                        <div class="vehicle-hero-left">
+                            <img src="${carImg}" onerror="this.onerror=null;this.src=FALLBACK_CAR_SVG;" alt="${activeJob.car}" class="vehicle-hero-img">
                             <div>
-                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;">
-                                    <span style="background:var(--blue-primary); color:#fff; font-size:12px; font-weight:800; padding:2px 9px; border-radius:7px;">Bay ${selectedBayNumber} • ${activeJob.ticket}</span>
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                    <span style="background:var(--blue-primary); color:#fff; font-size:11.5px; font-weight:800; padding:3px 10px; border-radius:7px;">Bay ${selectedBayNumber} • ${activeJob.ticket}</span>
                                     <span style="font-size:12px; font-weight:700; color:var(--text-muted);">${activeJob.bookingId}</span>
                                 </div>
-                                <h2 style="font-size:18px; font-weight:800; color:var(--blue-dark);">${activeJob.car}</h2>
-                                <small style="color:var(--text-muted);">Pelanggan: <strong>${activeJob.name}</strong> (${activeJob.phone}) • Mekanik: <strong>${activeJob.mechanic || 'Andi Wijaya'}</strong></small>
+                                <h2 style="font-size:19px; font-weight:800; color:var(--blue-dark); line-height:1.25;">${activeJob.car}</h2>
+                                <span style="font-size:12.5px; color:var(--blue-accent); font-weight:700;">${activeJob.yearKm || '2023 • 25.000 km'} • Mesin ${engineKey}</span>
                             </div>
                         </div>
-                        <span class="status-pill ${activeJob.status}">
-                            ${activeJob.status === 'called' ? 'Sedang Dipanggil' : (activeJob.status === 'working' ? 'Sedang Dikerjakan' : 'Menunggu')}
+
+                        <span class="status-pill ${activeJob.status}" style="flex-shrink:0;">
+                            ${activeJob.status === 'called' ? 'Sedang Dipanggil' : 'Sedang Dikerjakan'}
                         </span>
                     </div>
 
-                    <!-- Kontrol Tahap Status -->
-                    <div style="margin-top:16px;">
-                        <label style="display:block; font-size:12px; font-weight:800; color:var(--blue-dark); margin-bottom:8px;">1. Ubah Status Pengerjaan Bay:</label>
-                        <div style="display:flex; flex-wrap:wrap; gap:8px;">
-                            <button type="button" class="btn-outline" style="${activeJob.status === 'waiting' ? 'background:var(--blue-soft); border-color:var(--blue-accent);' : ''}" onclick="updateJobStatus('${activeJob.bookingId}', 'waiting')">Menunggu</button>
-                            <button type="button" class="btn-outline" style="${activeJob.status === 'called' ? 'background:var(--blue-soft); border-color:var(--blue-accent);' : ''}" onclick="updateJobStatus('${activeJob.bookingId}', 'called')">Panggil ke Bay ${selectedBayNumber}</button>
-                            <button type="button" class="btn-outline" style="${activeJob.status === 'working' ? 'background:var(--warning-bg); border-color:#f59e0b; color:#b45309;' : ''}" onclick="updateJobStatus('${activeJob.bookingId}', 'working')">Mulai Dikerjakan</button>
-                            <button type="button" class="btn-primary" style="background:#15803d; box-shadow:none;" onclick="completeWorkshopJob('${activeJob.bookingId}')">&#10003; Selesaikan &amp; Kirim ke POS</button>
+                    <div class="job-meta-grid">
+                        <div>
+                            <span>Nama &amp; Kontak Pelanggan</span>
+                            <strong>${activeJob.name} (${activeJob.phone})</strong>
+                        </div>
+                        <div>
+                            <span>Tim Mekanik Pengerja</span>
+                            <strong>${activeJob.mechanic || 'Andi Wijaya'}</strong>
                         </div>
                     </div>
 
-                    <!-- Kontrol Maju / Mundur Estimasi Waktu (Sinkron ke Customer) -->
                     <div style="margin-top:18px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <label style="font-size:12px; font-weight:800; color:var(--blue-dark);">2. Sesuaikan Estimasi Waktu (Otomatis Update di Layar Customer):</label>
-                            <strong style="font-size:14px; color:var(--blue-accent);">Saat ini: ${activeJob.est}</strong>
+                        <label style="display:block; font-size:12px; font-weight:800; color:var(--blue-dark); margin-bottom:8px;">
+                            1. Tahap Pengerjaan Bay ${selectedBayNumber}:
+                        </label>
+                        <div class="status-stepper-grid">
+                            <button type="button" class="status-step-btn ${activeJob.status === 'waiting' ? 'active-waiting' : ''}" onclick="releaseBayToWaiting('${activeJob.bookingId}')">
+                                Kembalikan ke Antrean
+                            </button>
+                            <button type="button" class="status-step-btn ${activeJob.status === 'called' ? 'active-called' : ''}" onclick="updateJobStatus('${activeJob.bookingId}', 'called')">
+                                Panggil ke Bay ${selectedBayNumber}
+                            </button>
+                            <button type="button" class="status-step-btn ${activeJob.status === 'working' ? 'active-working' : ''}" onclick="updateJobStatus('${activeJob.bookingId}', 'working')">
+                                Sedang Dikerjakan
+                            </button>
+                            <button type="button" class="status-step-btn complete-btn" onclick="completeWorkshopJob('${activeJob.bookingId}')">
+                                &#10003; Selesai
+                            </button>
                         </div>
-                        <div class="time-adjust-bar">
-                            <button type="button" class="btn-time-step" onclick="adjustJobEstimate('${activeJob.bookingId}', -10)">-10 Mnt (Lebih Cepat)</button>
+                    </div>
+
+                    <div style="margin-top:18px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                            <label style="font-size:12px; font-weight:800; color:var(--blue-dark);">
+                                2. Estimasi Waktu Tersisa (Sinkron ke Layar Customer):
+                            </label>
+                            <strong style="font-size:13.5px; color:var(--blue-accent);" id="workspace-est-label-${activeJob.bookingId}">
+                                ${activeJob.est} (${formatSecondsCountdown(remSec)})
+                            </strong>
+                        </div>
+                        <div class="time-adjust-grid">
+                            <button type="button" class="btn-time-step" onclick="adjustJobEstimate('${activeJob.bookingId}', -15)">-15 Mnt</button>
+                            <button type="button" class="btn-time-step" onclick="adjustJobEstimate('${activeJob.bookingId}', -10)">-10 Mnt</button>
                             <button type="button" class="btn-time-step" onclick="adjustJobEstimate('${activeJob.bookingId}', -5)">-5 Mnt</button>
                             <button type="button" class="btn-time-step delay" onclick="adjustJobEstimate('${activeJob.bookingId}', 5)">+5 Mnt</button>
-                            <button type="button" class="btn-time-step delay" onclick="adjustJobEstimate('${activeJob.bookingId}', 10)">+10 Mnt (Mundur)</button>
+                            <button type="button" class="btn-time-step delay" onclick="adjustJobEstimate('${activeJob.bookingId}', 10)">+10 Mnt</button>
                             <button type="button" class="btn-time-step delay" onclick="adjustJobEstimate('${activeJob.bookingId}', 15)">+15 Mnt</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Kartu Revisi Jenis Servis (A,B,C -> A,C,D) -->
                 <div class="card-box">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:14px;">
                         <div>
-                            <h3 style="font-size:16px; font-weight:800; color:var(--blue-dark);">Revisi Item Pekerjaan Servis</h3>
-                            <small style="color:var(--text-muted);">Hapus atau tambah item servis jika hasil pengecekan fisik berbeda dari prediksi awal.</small>
+                            <h3 style="font-size:16px; font-weight:800; color:var(--blue-dark);">Jenis Layanan Servis</h3>
+                            <small style="color:var(--text-muted);">Layanan yang dipilih saat pendaftaran awal. Klik Edit jika ada perubahan.</small>
                         </div>
+                        ${!isEditingServices ? `<button type="button" class="btn-outline" onclick="toggleEditServicesMode()">Edit Jenis Servis</button>` : ''}
                     </div>
-
-                    <!-- List Layanan Aktif -->
-                    <div style="margin-bottom:14px;">
-                        ${activeJob.servicesList.map((srv, sIdx) => `
-                            <div class="item-line-row">
-                                <div>
-                                    <strong style="display:block; font-size:13.5px; color:var(--blue-dark);">${srv.name}</strong>
-                                    <small style="color:var(--text-muted);">${formatRupiah(srv.price)}</small>
-                                </div>
-                                <button type="button" onclick="removeServiceFromJob('${activeJob.bookingId}', ${sIdx})" style="background:var(--danger-bg); color:var(--danger-text); border:none; border-radius:8px; padding:6px 10px; font-size:12px; font-weight:700; cursor:pointer;">
-                                    Hapus
-                                </button>
-                            </div>
-                        `).join('')}
-                    </div>
-
-                    <!-- Tambah Layanan Pengganti -->
-                    <div style="display:flex; gap:8px;">
-                        <select id="addServiceDropdown">
-                            ${availableServices.map(s => `<option value="${s.id}">${s.name} — ${formatRupiah(s.price)}</option>`).join('')}
-                        </select>
-                        <button type="button" class="btn-outline" style="white-space:nowrap;" onclick="addServiceToJob('${activeJob.bookingId}', '${engineKey}')">+ Tambah Servis</button>
-                    </div>
+                    ${serviceSectionHtml}
                 </div>
             </div>
 
-            <!-- KOLOM KANAN: TAMBAH SPAREPART & JASA PEMASANGAN + RINGKASAN BIAYA -->
             <div style="display:flex; flex-direction:column; gap:20px;">
                 <div class="card-box">
                     <h3 style="font-size:16px; font-weight:800; color:var(--blue-dark); margin-bottom:4px;">Penggantian Sparepart &amp; Jasa Pasang</h3>
@@ -217,7 +512,6 @@ function renderStaffQueueWorkspace() {
                         </div>
                     </div>
 
-                    <!-- Daftar Sparepart Terpasang -->
                     <div>
                         ${activeJob.sparepartsList.length === 0
                             ? `<div style="text-align:center; padding:18px; font-size:12.5px; color:var(--text-muted); border:1px dashed #cbd5e1; border-radius:10px;">Belum ada penggantian sparepart pada pengerjaan ini.</div>`
@@ -249,7 +543,6 @@ function renderStaffQueueWorkspace() {
                     </div>
                 </div>
 
-                <!-- Ringkasan Tagihan Sementara (Siap Diteruskan ke POS Kasir) -->
                 <div class="card-box" style="background:var(--blue-soft); border-color:#bfdbfe;">
                     <h4 style="font-size:14.5px; font-weight:800; color:var(--blue-dark); margin-bottom:10px;">Ringkasan Biaya Pengerjaan</h4>
                     <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
@@ -264,9 +557,6 @@ function renderStaffQueueWorkspace() {
                         <strong>Total Sementara (Pre-POS)</strong>
                         <strong>${formatRupiah(grandTotal)}</strong>
                     </div>
-                    <small style="display:block; color:var(--text-muted); margin-top:8px;">
-                        *Potongan promo member &amp; metode pembayaran akan diproses pada modul kasir POS setelah servis selesai.
-                    </small>
                 </div>
             </div>
         </div>
@@ -289,37 +579,51 @@ function updateJobStatus(bookingId, newStatus) {
     });
 }
 
+function releaseBayToWaiting(bookingId) {
+    mutateActiveJob(bookingId, (job) => {
+        job.status = 'waiting';
+        job.bay = 0;
+        job.mechanics = [];
+        job.mechanic = 'Menunggu Alokasi Mekanik';
+    });
+}
+
 function adjustJobEstimate(bookingId, deltaMinutes) {
     mutateActiveJob(bookingId, (job) => {
-        const currentMins = Number(job.estMinutes || 15);
-        const updatedMins = Math.max(5, currentMins + deltaMinutes);
+        const currentSec = typeof job.remainingSeconds === 'number'
+            ? job.remainingSeconds
+            : Number(job.estMinutes || 15) * 60;
+        const updatedSec = Math.max(60, currentSec + (deltaMinutes * 60));
+        job.remainingSeconds = updatedSec;
+        const updatedMins = Math.ceil(updatedSec / 60);
         job.estMinutes = updatedMins;
         job.est = `± ${updatedMins} Menit`;
     });
 }
 
-function addServiceToJob(bookingId, engineKey) {
-    const sel = document.getElementById('addServiceDropdown');
-    if (!sel) return;
+function saveEditedServices(bookingId, engineKey) {
+    const checkedIds = Array.from(document.querySelectorAll('.edit-srv-checkbox:checked')).map(cb => cb.value);
+    if (checkedIds.length === 0) {
+        alert('Pilih minimal 1 jenis layanan servis.');
+        return;
+    }
+
     const catalog = STAFF_SERVICE_CATALOG[engineKey] || STAFF_SERVICE_CATALOG.Bensin;
-    const found = catalog.find(s => s.id === sel.value);
-    if (!found) return;
-
     mutateActiveJob(bookingId, (job) => {
-        if (!Array.isArray(job.servicesList)) job.servicesList = [];
-        job.servicesList.push({ ...found });
-        job.service = job.servicesList.map(s => s.name).join(', ');
-    });
-}
+        const updatedList = checkedIds.map(id => {
+            const existingCustom = (job.servicesList || []).find(s => s.id === id);
+            if (existingCustom) return existingCustom;
+            const found = catalog.find(s => s.id === id);
+            return found ? { ...found } : null;
+        }).filter(Boolean);
 
-function removeServiceFromJob(bookingId, srvIdx) {
-    mutateActiveJob(bookingId, (job) => {
-        if (job.servicesList.length <= 1) {
-            alert('Minimal harus terdapat 1 layanan servis pada kendaraan.');
-            return;
-        }
-        job.servicesList.splice(srvIdx, 1);
-        job.service = job.servicesList.map(s => s.name).join(', ');
+        job.servicesList = updatedList;
+        job.service = updatedList.map(s => s.name).join(', ');
+        const totalDur = updatedList.reduce((acc, s) => acc + Number(s.duration || 30), 0);
+        job.estMinutes = totalDur;
+        job.remainingSeconds = totalDur * 60;
+        job.est = `± ${totalDur} Menit`;
+        isEditingServices = false;
     });
 }
 
@@ -369,9 +673,9 @@ function completeWorkshopJob(bookingId) {
 
     const job = all[idx];
     job.status = 'done';
+    job.bay = 0;
     localStorage.setItem('drivepro_bookings_list', JSON.stringify(all));
 
-    // Catat ke Riwayat Servis Selesai (drivepro_completed_history)
     const now = new Date();
     const finishedTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} WIB`;
     const srvTotal = (job.servicesList || []).reduce((acc, s) => acc + Number(s.price || 0), 0);
@@ -391,8 +695,9 @@ function completeWorkshopJob(bookingId) {
         customerName: job.name,
         customerPhone: job.phone,
         car: job.car,
+        yearKm: job.yearKm || '-',
         staffAdvisor: job.staffAdvisor || currentStaff.name,
-        mechanic: job.mechanic || 'Andi Wijaya (Mekanik Senior)',
+        mechanic: job.mechanic || 'Andi Wijaya (Lead EV & Hybrid)',
         servicesList: job.servicesList || [],
         sparepartsList: job.sparepartsList || [],
         totalAmount: srvTotal + partTotal,
@@ -400,6 +705,14 @@ function completeWorkshopJob(bookingId) {
     });
     localStorage.setItem('drivepro_completed_history', JSON.stringify(history));
 
-    alert(`Servis ${job.car} (${job.ticket}) selesai! Data telah masuk ke Riwayat Servis dan siap diproses di POS Kasir.`);
+    const remainingMyActive = getMyActiveAssignedJobs();
+    selectedBayNumber = remainingMyActive.length > 0 ? Number(remainingMyActive[0].bay) : null;
+
     renderStaffQueueWorkspace();
+}
+
+function resetDemoQueues() {
+    localStorage.removeItem('drivepro_bookings_list');
+    localStorage.removeItem('drivepro_completed_history');
+    location.reload();
 }
